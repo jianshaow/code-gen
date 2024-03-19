@@ -26,7 +26,7 @@ services:
       - --controller-address
       - http://controller:21001
       - --worker-address
-      - http://chat-worker:21002
+      - http://worker:21002
       - --model-names
       - ${model_name}
       - --model-path
