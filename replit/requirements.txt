@@ -1,0 +1,4 @@
+einops
+accelerate
+transformers==4.34.1
+bitsandbytes
