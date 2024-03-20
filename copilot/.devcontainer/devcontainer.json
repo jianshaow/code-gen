@@ -1,0 +1,25 @@
+{
+	"name": "COPILOT",
+	"image": "jianshao/dl-dev-base:3.11",
+	"remoteEnv": {
+		"PYTHONPATH": "."
+	},
+	"mounts": [
+		{
+			"source": "${localEnv:HOME}/.ssh",
+			"target": "/home/devel/.ssh",
+			"type": "bind"
+		}
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.black-formatter",
+				"ms-python.isort",
+				"alphabotsec.vscode-eclipse-keybindings"
+			]
+		}
+	}
+}
