@@ -1,6 +1,6 @@
 {
 	"name": "REPLIT",
-	"image": "jianshao/replit-demo:0.0.1",
+	"image": "jianshao/codegen-demo:0.0.1",
 	"features": {
 		"ghcr.io/devcontainers/features/git:1": {}
 	},
