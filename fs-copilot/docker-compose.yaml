@@ -12,7 +12,7 @@ services:
       - 0.0.0.0
   worker:
     image: jianshao/fastchat-demo:${image_ver}
-    container_name: ${container_name_prefix}chat-worker
+    container_name: ${container_name_prefix}worker
     restart: unless-stopped
     depends_on:
       - controller
@@ -55,3 +55,13 @@ services:
       - http://controller:21001
     ports:
       - 8000:8000
+  nextchat:
+    image: yidadaa/chatgpt-next-web:v2.11.3
+    container_name: ${container_name_prefix}nextchat
+    restart: unless-stopped
+    depends_on:
+      - openai
+    environment:
+      - BASE_URL=http://openai:8000
+    ports:
+      - 3000:3000
