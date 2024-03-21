@@ -3,3 +3,4 @@ tiktoken==0.4.0
 accelerate
 transformers==4.33.3
 bitsandbytes
+autoawq
