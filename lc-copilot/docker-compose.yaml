@@ -8,7 +8,7 @@ services:
       - HF_REPO_ID=${HF_REPO_ID}
       - HF_MODEL_FILE=${HF_MODEL_FILE}
       - HF_MODEL_ALIAS=${HF_MODEL_ALIAS}
-      - "LC_ARGS=--n_ctx 16192"
+      # - "LC_ARGS=--n_ctx 16192"
     volumes:
       - ${model_cache_path}:/home/devel/.cache
     ports:
