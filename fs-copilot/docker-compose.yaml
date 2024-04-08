@@ -16,6 +16,8 @@ services:
     restart: unless-stopped
     depends_on:
       - controller
+    environment:
+      - https_proxy=${https_proxy}
     command:
       - python
       - -m

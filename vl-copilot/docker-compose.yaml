@@ -5,6 +5,7 @@ services:
     container_name: ${container_name_prefix}openai
     restart: unless-stopped
     environment:
+      - https_proxy=${https_proxy}
       - MODEL_PATH=${MODEL_PATH}
       - MODEL_NAME=${MODEL_NAME}
     volumes:
