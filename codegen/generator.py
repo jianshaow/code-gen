@@ -8,7 +8,7 @@ from transformers import (
 
 
 def generate(
-    model_name="replit/replit-code-v1_5-3b", hint="def fibonacci(n):", bnb_quan=True
+    model_name="Salesforce/codegen25-7b-multi", hint="def fibonacci(n):", bnb_quan=True
 ):
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     generation_config = GenerationConfig.from_pretrained(model_name, max_length=1024)
@@ -37,7 +37,7 @@ def generate(
 
 if __name__ == "__main__":
     code = generate(
-        # "Salesforce/codegen25-7b-multi",
+        # "replit/replit-code-v1_5-3b",
         # bnb_quan=False,
     )
     print("======================================================")
