@@ -1,0 +1,24 @@
+# backend
+
+## Local Environment
+
+### Prepare
+~~~ shell
+python -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+~~~
+
+## Docker Environment
+
+### Build
+~~~ shell
+export image_tag=0.0.1
+docker build -t jianshao/codegen-demo:$image_tag .
+docker push jianshao/codegen-demo:$image_tag
+~~~
+### Test image
+~~~ shell
+docker run -it --rm jianshao/codegen-demo:$image_tag bash
+~~~
