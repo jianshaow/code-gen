@@ -5,14 +5,14 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/query", methods=["GET"])
+@app.route("/generate", methods=["GET"])
 def query_index():
-    return "Hello", 200
+    return "print(\"Hello, World\")", 200
 
 
-@app.route("/data", methods=["GET"])
+@app.route("/template", methods=["GET"])
 def query_data():
-    return ["data1", "data2"], 200
+    return ["prompt1", "prompt2"], 200
 
 
 if __name__ == "__main__":
