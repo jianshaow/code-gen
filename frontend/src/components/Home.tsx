@@ -13,23 +13,20 @@ class Home extends Component<{}, HomeState> {
   constructor(props: {}) {
     super(props);
     this.state = { dataList: [], data: "__root", request: "", response: "" }
-    // this.initData()
+    this.initTemplate()
   }
 
-  async fetchData() {
-    return fetch('http://localhost:5000/data').then(response => response.json());
+  async fetchTemplate() {
+    return fetch('http://localhost:5000/template').then(response => response.json());
   }
 
-  async query(data: string, text: string) {
-    return fetch(`http://localhost:5000/query?data=${data}&text=${text}`).then(response => response.text());
+  async generate(data: string, text: string) {
+    return fetch(`http://localhost:5000/generate?template=${data}&text=${text}`).then(response => response.text());
   }
 
-  initData() {
-    this.fetchData().then(dataList => {
-      const keys = Object.keys(dataList).map((data) => {
-        return data;
-      });
-      this.setState({ dataList: keys })
+  initTemplate() {
+    this.fetchTemplate().then(templates => {
+      this.setState({ dataList: templates })
     });
   }
 
@@ -37,7 +34,7 @@ class Home extends Component<{}, HomeState> {
     e.preventDefault();
     const { data, request } = this.state;
 
-    this.query(data, request).then(response => {
+    this.generate(data, request).then(response => {
       this.setState({ response: response });
     });
   }
@@ -50,7 +47,7 @@ class Home extends Component<{}, HomeState> {
           <div>
             <h1>Code Generator</h1>
             <div>
-              <label>Docs: </label>
+              <label>Template: </label>
               <select value={data} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                 this.setState({ data: e.target.value })
               }}>{dataList.map(data => (
@@ -58,21 +55,19 @@ class Home extends Component<{}, HomeState> {
               ))}
               </select>
             </div>
-            <label>Answer</label>
+            <label>Generated Code</label>
             <div>
               <textarea value={response} readOnly rows={10} />
             </div>
             <div className="center">
-              <label>Question: </label>
+              <label>Requiremenet: </label>
               <form onSubmit={this.handleSubmitRequest}>
-                <input type="text"
-                  value={request}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                <textarea value={request}
+                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                     this.setState({ request: e.target.value });
                   }}
-                  style={{ width: '70%' }}
                 />
-                <button type="submit">Submit</button>
+                <button type="submit">Generate</button>
               </form>
             </div>
           </div>
