@@ -4,27 +4,27 @@ import './Common.css';
 import './Template.css';
 
 interface TemplateState {
+  templates: string[];
 }
 
 class Template extends Component<{}, TemplateState> {
   constructor(props: {}) {
     super(props);
     this.state = {
+      templates: [""]
     };
   }
 
   render() {
-    const { } = this.state;
+    const { templates } = this.state;
 
     return (
-      <div className='container'>
+      <div className='column-container'>
         <div className='header'>
           <Link to='/'>Return Home</Link>
         </div>
         <div className='center'>
-          <h1>Device Information</h1>
-          <ul className='block'>
-          </ul>
+          <h1>Template Setting</h1>
         </div>
       </div>
     );

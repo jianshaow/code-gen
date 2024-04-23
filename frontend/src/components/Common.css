@@ -6,6 +6,13 @@
 
 .container {
   display: flex;
+  justify-content: center;
+  align-items: top;
+  margin: 20px 0;
+}
+
+.column-container {
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: top;
@@ -14,20 +21,18 @@
 
 .center {
   text-align: center;
+  align-items: center;
+  margin: 0 10px;
 }
 
 .left {
-  text-align: left;
+  flex: 1;
+  margin-right: 10px;
 }
 
 .right {
-  text-align: right;
-}
-
-.block {
-  display: inline-block;
-  text-align: left;
-  margin: 0 auto;
+  flex: 1;
+  margin-left: 10px;
 }
 
 .divider {
