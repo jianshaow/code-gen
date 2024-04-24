@@ -24,6 +24,6 @@ def generate(tmpl_name, requirement):
 
 
 if __name__ == "__main__":
-    requirement = len(sys.argv) == 1 and sys.argv[0] or "code a hello world example."
+    requirement = len(sys.argv) == 1 and sys.argv[0] or "code an example"
     generated = generate("prompt1", requirement)
     print(generated)
