@@ -1,6 +1,5 @@
 import os, config
 
-
 __tmpl_path_dict: dict = None
 
 

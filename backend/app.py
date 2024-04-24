@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 
 import prompts, generator
@@ -9,12 +9,30 @@ CORS(app)
 
 @app.route("/generate", methods=["GET"])
 def generate():
-    return generator.generate("prompt1", ""), 200
+    template = request.args.get("template")
+    requirement = request.args.get("requirement")
+    return generator.generate(template, requirement), 200
 
 
 @app.route("/template", methods=["GET"])
 def get_templates():
     return prompts.get_tmpl_names(), 200
+
+
+@app.route("/template/<tmpl_name>", methods=["GET"])
+def get_template(tmpl_name):
+    return prompts.get_template(tmpl_name)
+
+
+@app.route("/template/<tmpl_name>", methods=["PUT"])
+def update_template(tmpl_name):
+    raw_data = request.get_data()
+    content = raw_data.decode("utf-8")
+    prompts.save_template(
+        tmpl_name,
+        content,
+    )
+    return "", 204
 
 
 if __name__ == "__main__":

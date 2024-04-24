@@ -1,47 +1,46 @@
-import React, { Component, ChangeEvent, FormEvent } from 'react';
+import { Component, ChangeEvent, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import './Common.css';
 import './Home.css';
 
 interface HomeState {
-  dataList: string[];
-  data: string;
-  request: string;
-  response: string;
+  templates: string[];
+  template: string;
+  requirement: string;
+  generated: string;
 }
 
 class Home extends Component<{}, HomeState> {
   constructor(props: {}) {
     super(props);
-    this.state = { dataList: [], data: "__root", request: "", response: "" }
-    this.initTemplate()
+    this.state = { templates: [], template: "", requirement: "", generated: "" }
+    this.initTemplate();
   }
 
-  async fetchTemplate() {
+  async fetchTemplates() {
     return fetch('http://localhost:5000/template').then(response => response.json());
   }
 
-  async generate(data: string, text: string) {
-    return fetch(`http://localhost:5000/generate?template=${data}&text=${text}`).then(response => response.text());
+  async generate(template: string, requirement: string) {
+    return fetch(`http://localhost:5000/generate?template=${template}&requirement=${requirement}`).then(response => response.text());
   }
 
   initTemplate() {
-    this.fetchTemplate().then(templates => {
-      this.setState({ dataList: templates })
+    this.fetchTemplates().then(templates => {
+      this.setState({ templates: templates, template: templates[0] })
     });
   }
 
-  handleSubmitRequest = async (e: FormEvent) => {
-    e.preventDefault();
-    const { data, request } = this.state;
+  handleGenerateRequest = async (e: MouseEvent) => {
+    const { template, requirement } = this.state;
 
-    this.generate(data, request).then(response => {
-      this.setState({ response: response });
+    this.generate(template, requirement).then(response => {
+      this.setState({ generated: response });
     });
   }
 
   render() {
-    const { dataList, data, request, response } = this.state;
+    const { templates, template, requirement, generated } = this.state;
     return (
       <div className="column-container">
         <div className='header'>
@@ -51,9 +50,9 @@ class Home extends Component<{}, HomeState> {
           <h1>Code Generator</h1>
           <div>
             <label>Template: </label>
-            <select value={data} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-              this.setState({ data: e.target.value })
-            }}>{dataList.map(data => (
+            <select value={template} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+              this.setState({ template: e.target.value })
+            }}>{templates.map(data => (
               <option key={data} value={data}>{data}</option>
             ))}
             </select>
@@ -61,24 +60,23 @@ class Home extends Component<{}, HomeState> {
           <div className="container">
             <div className="left">
               <div className='column-container'>
-                <label>Requiremenet: </label>
-                <textarea value={request} rows={20}
+                <label>Requiremenet</label>
+                <textarea value={requirement} rows={20}
                   onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                    this.setState({ request: e.target.value });
+                    this.setState({ requirement: e.target.value });
                   }} />
               </div>
             </div>
             <div className='column-container'>
-              <button className='center' type="submit" onClick={this.handleSubmitRequest}>Generate</button>
+              <button className='center' onClick={this.handleGenerateRequest}>Generate</button>
             </div>
             <div className='right'>
               <div className='column-container'>
                 <label>Generated Code</label>
-                <textarea value={response} readOnly rows={20} />
+                <textarea value={generated} readOnly rows={20} />
               </div>
             </div>
           </div>
-
         </div>
       </div >
     );
