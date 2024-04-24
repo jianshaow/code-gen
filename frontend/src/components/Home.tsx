@@ -22,7 +22,12 @@ class Home extends Component<{}, HomeState> {
   }
 
   async generate(template: string, requirement: string) {
-    return fetch(`http://localhost:5000/generate?template=${template}&requirement=${requirement}`).then(response => response.text());
+    const url = `http://localhost:5000/${template}/generate`
+    return fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "plain/text" },
+      body: requirement,
+    }).then(response => response.text());
   }
 
   initTemplate() {

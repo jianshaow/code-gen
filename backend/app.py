@@ -7,11 +7,11 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/generate", methods=["GET"])
-def generate():
-    template = request.args.get("template")
-    requirement = request.args.get("requirement")
-    return generator.generate(template, requirement), 200
+@app.route("/<tmpl_name>/generate", methods=["POST"])
+def generate(tmpl_name):
+    raw_data = request.get_data()
+    requirement = raw_data.decode("utf-8")
+    return generator.generate(tmpl_name, requirement), 200
 
 
 @app.route("/template", methods=["GET"])
