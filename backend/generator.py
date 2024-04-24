@@ -1,4 +1,4 @@
-import os, sys, prompts
+import sys, config, prompts
 from openai import OpenAI
 
 __client = None
@@ -8,8 +8,8 @@ def get_client():
     global __client
     if __client == None:
         __client = OpenAI(
-            base_url=os.environ.get("OPENAI_API_BASE"),
-            api_key=os.environ.get("OPENAI_API_KEY"),
+            base_url=config.base_url,
+            api_key=config.api_key,
         )
     return __client
 
@@ -18,7 +18,7 @@ def generate(tmpl_name, requirement):
     prompt = prompts.get_prompt(tmpl_name, requirement)
     client = get_client()
     completion = client.chat.completions.create(
-        model="gpt-3.5-turbo", messages=[{"role": "user", "content": prompt}]
+        model=config.model_name, messages=[{"role": "user", "content": prompt}]
     )
     return completion.choices[0].message.content
 
