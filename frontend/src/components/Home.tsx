@@ -13,7 +13,7 @@ interface HomeState {
 class Home extends Component<{}, HomeState> {
   constructor(props: {}) {
     super(props);
-    this.state = { templates: [], template: "", requirement: "", generated: "" }
+    this.state = { templates: [], template: "", requirement: "code an example", generated: "" }
     this.initTemplate();
   }
 
