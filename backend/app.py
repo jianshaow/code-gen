@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 
-import prompts, generator
+import config, prompts, generator
 
 app = Flask(__name__)
 CORS(app)
@@ -16,6 +16,9 @@ def generate(tmpl_name):
 
 @app.route("/template", methods=["GET"])
 def get_templates():
+    reload = request.args.get("reload", "false")
+    if reload == "true":
+        prompts.reload()
     return prompts.get_tmpl_names(), 200
 
 
@@ -32,6 +35,18 @@ def update_template(tmpl_name):
         tmpl_name,
         content,
     )
+    return "", 204
+
+
+@app.route("/config", methods=["GET"])
+def get_config():
+    return config.get_config(), 200
+
+
+@app.route("/config", methods=["PUT"])
+def update_config():
+    conf = request.get_json()
+    config.update_config(conf)
     return "", 204
 
 

@@ -6,7 +6,7 @@ __tmpl_path_dict: dict = None
 def scan_template_dir():
     global __tmpl_path_dict
     __tmpl_path_dict = {}
-    root_dir = config.prompt_tmpl_dir
+    root_dir = config.tmpl_dir
     for entry in os.listdir(root_dir):
         path = os.path.join(root_dir, entry)
         tmpl_name, _ = os.path.splitext(entry)
@@ -15,7 +15,7 @@ def scan_template_dir():
 
 def reload():
     global __tmpl_path_dict
-    __tmpl_path_dict.clear()
+    __tmpl_path_dict = None
     scan_template_dir()
 
 
