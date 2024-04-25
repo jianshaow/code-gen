@@ -29,16 +29,6 @@
   margin: 0 10px;
 }
 
-.left {
-  flex: 1;
-  margin-right: 10px;
-}
-
-.right {
-  flex: 1;
-  margin-left: 10px;
-}
-
 .divider {
   width: 100%;
   height: 1px;

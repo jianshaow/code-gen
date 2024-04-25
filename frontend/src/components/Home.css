@@ -1,0 +1,21 @@
+.left {
+    flex: 2;
+    margin-right: 10px;
+}
+
+.right {
+    flex: 3;
+    margin-left: 10px;
+}
+
+.markdown-container {
+    height: 310px;
+    width: 700px;
+    overflow: auto;
+    border: 1px solid #000;
+}
+
+.markdown-content {
+    text-align: left;
+    padding: 10px;
+}

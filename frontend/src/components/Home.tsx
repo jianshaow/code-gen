@@ -1,5 +1,9 @@
 import { Component, ChangeEvent, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { Marked } from 'marked';
+import { markedHighlight } from "marked-highlight";
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css';
 import './Common.css';
 import './Home.css';
 
@@ -40,12 +44,28 @@ class Home extends Component<{}, HomeState> {
     const { template, requirement } = this.state;
 
     this.generate(template, requirement).then(response => {
-      this.setState({ generated: response });
+      this.getMarkdown(response).then((markdown) => {
+        this.setState({ generated: markdown });
+      });
     });
+  }
+
+  async getMarkdown(mdContent: string) {
+    const marked = new Marked(
+      markedHighlight({
+        langPrefix: 'hljs language-',
+        highlight(code, lang, info) {
+          const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+          return hljs.highlight(code, { language }).value;
+        }
+      })
+    );
+    return await marked.parse(mdContent);
   }
 
   render() {
     const { templates, template, requirement, generated } = this.state;
+
     return (
       <div className="column-container">
         <div className='header'>
@@ -78,7 +98,9 @@ class Home extends Component<{}, HomeState> {
             <div className='right'>
               <div className='column-container'>
                 <label>Generated Code</label>
-                <textarea value={generated} readOnly rows={20} />
+                <div className='markdown-container'>
+                  <div className='markdown-content' dangerouslySetInnerHTML={{ __html: generated }} />
+                </div>
               </div>
             </div>
           </div>
