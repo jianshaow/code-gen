@@ -1,18 +1,18 @@
 .header {
-  width: 90%;
   text-align: right;
-  margin: 0 auto;
+  margin: 0 20px;
 }
 
 .title {
-  text-align: center;
+  margin: 10px 20px;
+  text-align: left;
 }
 
 .container {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: top;
-  margin: 20px 0;
+  margin: 0 20px;
 }
 
 .column-container {
@@ -20,7 +20,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: top;
-  margin: 20px 0;
+  margin: 10px 0;
 }
 
 .center {

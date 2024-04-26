@@ -68,44 +68,36 @@ class Home extends Component<{}, HomeState> {
 
     return (
       <div className="column-container">
-        <div className='header'>
-          <Link to="/setting">Setting</Link>
+        <Link className='header' to="/setting">Setting</Link>
+        <h1 className='title'>Code Generator</h1>
+        <div className='container'>
+          <label>Template: </label>
+          <select value={template} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+            this.setState({ template: e.target.value })
+          }}>{templates.map(data => (
+            <option key={data} value={data}>{data}</option>
+          ))}
+          </select>
         </div>
-        <div className="center">
-          <h1>Code Generator</h1>
-          <div>
-            <label>Template: </label>
-            <select value={template} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-              this.setState({ template: e.target.value })
-            }}>{templates.map(data => (
-              <option key={data} value={data}>{data}</option>
-            ))}
-            </select>
+        <div className="container">
+          <div className='column-container'>
+            <label>Requiremenet</label>
+            <textarea className='tpl-area' value={requirement} rows={30}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                this.setState({ requirement: e.target.value });
+              }} />
           </div>
-          <div className="container">
-            <div className="left">
-              <div className='column-container'>
-                <label>Requiremenet</label>
-                <textarea value={requirement} rows={20}
-                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                    this.setState({ requirement: e.target.value });
-                  }} />
-              </div>
-            </div>
-            <div className='column-container'>
-              <button className='center' onClick={this.handleGenerateRequest}>Generate</button>
-            </div>
-            <div className='right'>
-              <div className='column-container'>
-                <label>Generated Code</label>
-                <div className='markdown-container'>
-                  <div className='markdown-content' dangerouslySetInnerHTML={{ __html: generated }} />
-                </div>
-              </div>
+          <div className='column-container'>
+            <button className='center' onClick={this.handleGenerateRequest}>=&gt;</button>
+          </div>
+          <div className='column-container'>
+            <label>Generated Code</label>
+            <div className='markdown-container'>
+              <div className='markdown-content' dangerouslySetInnerHTML={{ __html: generated }} />
             </div>
           </div>
         </div>
-      </div >
+      </div>
     );
   }
 }

@@ -107,55 +107,65 @@ class Setting extends Component<{}, SettingState> {
       <div className='column-container'>
         <Link className='header' to='/'>Return Home</Link>
         <h1 className='title'>Settings</h1>
-        <div className='header'>
-          <button onClick={this.saveConfig}>Save Setting</button>
-        </div>
-        <div className='setting'>
-          <div>
-            <label>OpenAI API Base URL: </label>
-            <input
-              type="text"
-              value={baseUrl}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                this.setState({ baseUrl: e.target.value });
-              }}
-            />
+        <label className='title'>General</label>
+        <div className='setting-container'>
+          <div className='setting'>
+            <div>
+              <label>OpenAI API Base URL: </label>
+              <input
+                type="text"
+                value={baseUrl}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  this.setState({ baseUrl: e.target.value });
+                }}
+              />
+            </div>
+          </div>
+          <div className='setting'>
+            <div>
+              <label>OpenAI API Key: </label>
+              <input
+                type="text"
+                value={apiKey}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  this.setState({ apiKey: e.target.value });
+                }}
+              />
+            </div>
+          </div>
+          <div className='setting'>
+            <div>
+              <label>Model: </label>
+              <input
+                type="text"
+                value={model_names}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  this.setState({ model: e.target.value });
+                }}
+              />
+            </div>
+          </div>
+          <div className='setting'>
+            <div>
+              <label>Template Dir: </label>
+              <input
+                type="text"
+                value={tmplDir}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  this.setState({ tmplDir: e.target.value });
+                }}
+              />
+            </div>
+          </div>
+          <div className='setting'>
+            <div>
+              <button onClick={this.saveConfig}>Save Setting</button>
+            </div>
           </div>
         </div>
+        <label className='title'>Template</label>
         <div className='setting'>
           <div>
-            <label>OpenAI API Key: </label>
-            <input
-              type="text"
-              value={apiKey}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                this.setState({ apiKey: e.target.value });
-              }}
-            />
-          </div>
-        </div>
-        <div className='setting'>
-          <div>
-            <label>Model: </label>
-            <input
-              type="text"
-              value={model_names}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                this.setState({ model: e.target.value });
-              }}
-            />
-          </div>
-        </div>
-        <div className='setting'>
-          <div>
-            <label>Template File Path: </label>
-            <input
-              type="text"
-              value={tmplDir}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                this.setState({ tmplDir: e.target.value });
-              }}
-            />
             <button onClick={this.reloadTemplates}>Reload</button>
             <label>Template: </label>
             <select value={template} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
