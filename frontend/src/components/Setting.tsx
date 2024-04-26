@@ -16,7 +16,7 @@ interface SettingState {
 class Setting extends Component<{}, SettingState> {
   constructor(props: {}) {
     super(props);
-    this.state = { model: "", baseUrl: "", apiKey: "", tmplDir: "", templates: [], template: "", content: "", };
+    this.state = { model: '', baseUrl: '', apiKey: '', tmplDir: '', templates: [], template: '', content: '', };
     this.initConfig();
     this.initTemplates();
   }
@@ -29,8 +29,8 @@ class Setting extends Component<{}, SettingState> {
   async updateConfig(config: string) {
     const url = `http://localhost:5000/config`;
     fetch(url, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
       body: config,
     })
   }
@@ -60,8 +60,8 @@ class Setting extends Component<{}, SettingState> {
   async updateTemplate(template: string, content: string) {
     const url = `http://localhost:5000/template/${template}`;
     fetch(url, {
-      method: "PUT",
-      headers: { "Content-Type": "plain/text" },
+      method: 'PUT',
+      headers: { 'Content-Type': 'plain/text' },
       body: content,
     })
   }
@@ -88,15 +88,15 @@ class Setting extends Component<{}, SettingState> {
   saveTemplate = async (e: MouseEvent) => {
     const { template, content } = this.state;
     this.updateTemplate(template, content).then(() => {
-      alert("Saved!");
+      alert('Saved!');
     })
   }
 
   saveConfig = async (e: MouseEvent) => {
     const { model, baseUrl, apiKey, tmplDir } = this.state
-    const config = { "model": model, "base_url": baseUrl, "api_key": apiKey, "tmpl_dir": tmplDir };
+    const config = { 'model': model, 'base_url': baseUrl, 'api_key': apiKey, 'tmpl_dir': tmplDir };
     this.updateConfig(JSON.stringify(config)).then(() => {
-      alert("Setting Saved!")
+      alert('Setting Saved!')
     })
   }
 
@@ -113,7 +113,7 @@ class Setting extends Component<{}, SettingState> {
             <div>
               <label>OpenAI API Base URL: </label>
               <input
-                type="text"
+                type='text'
                 value={baseUrl}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   this.setState({ baseUrl: e.target.value });
@@ -125,7 +125,7 @@ class Setting extends Component<{}, SettingState> {
             <div>
               <label>OpenAI API Key: </label>
               <input
-                type="text"
+                type='text'
                 value={apiKey}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   this.setState({ apiKey: e.target.value });
@@ -137,7 +137,7 @@ class Setting extends Component<{}, SettingState> {
             <div>
               <label>Model: </label>
               <input
-                type="text"
+                type='text'
                 value={model_names}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   this.setState({ model: e.target.value });
@@ -149,7 +149,7 @@ class Setting extends Component<{}, SettingState> {
             <div>
               <label>Template Dir: </label>
               <input
-                type="text"
+                type='text'
                 value={tmplDir}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   this.setState({ tmplDir: e.target.value });

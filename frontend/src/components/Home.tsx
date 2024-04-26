@@ -1,7 +1,7 @@
 import { Component, ChangeEvent, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Marked } from 'marked';
-import { markedHighlight } from "marked-highlight";
+import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import './Common.css';
@@ -17,7 +17,7 @@ interface HomeState {
 class Home extends Component<{}, HomeState> {
   constructor(props: {}) {
     super(props);
-    this.state = { templates: [], template: "", requirement: "code an example", generated: "" }
+    this.state = { templates: [], template: '', requirement: 'code an example', generated: '' }
     this.initTemplate();
   }
 
@@ -28,8 +28,8 @@ class Home extends Component<{}, HomeState> {
   async generate(template: string, requirement: string) {
     const url = `http://localhost:5000/${template}/generate`
     return fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "plain/text" },
+      method: 'POST',
+      headers: { 'Content-Type': 'plain/text' },
       body: requirement,
     }).then(response => response.text());
   }
@@ -67,8 +67,8 @@ class Home extends Component<{}, HomeState> {
     const { templates, template, requirement, generated } = this.state;
 
     return (
-      <div className="column-container">
-        <Link className='header' to="/setting">Setting</Link>
+      <div className='column-container'>
+        <Link className='header' to='/setting'>Setting</Link>
         <h1 className='title'>Code Generator</h1>
         <div className='container'>
           <label>Template: </label>
@@ -79,7 +79,7 @@ class Home extends Component<{}, HomeState> {
           ))}
           </select>
         </div>
-        <div className="container">
+        <div className='container'>
           <div className='column-container'>
             <label>Requiremenet</label>
             <textarea className='tpl-area' value={requirement} rows={30}
