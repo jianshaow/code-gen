@@ -17,7 +17,7 @@ interface SettingState {
   apiKey: string;
   models: string[];
   model: string;
-  tmplDir: string;
+  tplDir: string;
   templates: string[];
   template: string;
   content: string;
@@ -32,7 +32,7 @@ class Setting extends Component<{}, SettingState> {
       apiKey: '',
       model: '',
       models: [],
-      tmplDir: '',
+      tplDir: '',
       templates: [],
       template: '',
       content: '',
@@ -61,7 +61,7 @@ class Setting extends Component<{}, SettingState> {
         baseUrl: config.base_url,
         apiKey: config.api_key,
         model: config.model,
-        tmplDir: config.tmpl_dir,
+        tplDir: config.tpl_dir,
       });
     });
   }
@@ -93,13 +93,13 @@ class Setting extends Component<{}, SettingState> {
   }
 
   saveConfig = async (e: MouseEvent) => {
-    const { apiSpec, baseUrl, apiKey, model, tmplDir } = this.state
+    const { apiSpec, baseUrl, apiKey, model, tplDir } = this.state
     const config = {
       'api_spec': apiSpec,
       'base_url': baseUrl,
       'api_key': apiKey,
       'model': model,
-      'tmpl_dir': tmplDir
+      'tpl_dir': tplDir
     };
     updateConfig(JSON.stringify(config)).then(() => {
       alert('Setting Saved!')
@@ -107,7 +107,7 @@ class Setting extends Component<{}, SettingState> {
   }
 
   render() {
-    const { apiSpec, baseUrl, apiKey, models, model, tmplDir, templates, template, content } = this.state;
+    const { apiSpec, baseUrl, apiKey, models, model, tplDir, templates, template, content } = this.state;
 
     return (
       <div className='column-container'>
@@ -168,9 +168,9 @@ class Setting extends Component<{}, SettingState> {
               <label>Template Dir: </label>
               <input
                 type='text'
-                value={tmplDir}
+                value={tplDir}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  this.setState({ tmplDir: e.target.value });
+                  this.setState({ tplDir: e.target.value });
                 }}
               />
             </div>

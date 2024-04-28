@@ -7,11 +7,11 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/<tmpl_name>/generate", methods=["POST"])
-def generate(tmpl_name):
+@app.route("/<tpl_name>/generate", methods=["POST"])
+def generate(tpl_name):
     raw_data = request.get_data()
     requirement = raw_data.decode("utf-8")
-    return generator.generate(tmpl_name, requirement), 200
+    return generator.generate(tpl_name, requirement), 200
 
 
 @app.route("/template", methods=["GET"])
@@ -19,20 +19,20 @@ def get_templates():
     reload = request.args.get("reload", "false")
     if reload == "true":
         prompts.reload()
-    return prompts.get_tmpl_names(), 200
+    return prompts.get_tpl_names(), 200
 
 
-@app.route("/template/<tmpl_name>", methods=["GET"])
-def get_template(tmpl_name):
-    return prompts.get_template(tmpl_name)
+@app.route("/template/<tpl_name>", methods=["GET"])
+def get_template(tpl_name):
+    return prompts.get_template(tpl_name)
 
 
-@app.route("/template/<tmpl_name>", methods=["PUT"])
-def update_template(tmpl_name):
+@app.route("/template/<tpl_name>", methods=["PUT"])
+def update_template(tpl_name):
     raw_data = request.get_data()
     content = raw_data.decode("utf-8")
     prompts.save_template(
-        tmpl_name,
+        tpl_name,
         content,
     )
     return "", 204
