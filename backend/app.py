@@ -1,10 +1,19 @@
-from flask import Flask, request
+import os
+from flask import Flask, request, render_template
 from flask_cors import CORS
 
 import config, models, prompts, generator
 
-app = Flask(__name__)
+frontend = os.path.abspath(os.path.join("../frontend", "build"))
+frontend = os.environ.get("FRONTEND_DIR", frontend)
+static_folder = os.path.join(frontend, "static")
+app = Flask(__name__, template_folder=frontend, static_folder=static_folder)
 CORS(app)
+
+
+@app.route("/")
+def main():
+    return render_template("index.html")
 
 
 @app.route("/<tpl_name>/generate", methods=["POST"])
