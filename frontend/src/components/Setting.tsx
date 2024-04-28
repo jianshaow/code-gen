@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   fetchConfig,
   updateConfig,
+  fetchModels,
   fetchTemplates,
   fetchTemplate,
   updateTemplate
@@ -11,9 +12,11 @@ import './Common.css';
 import './Setting.css';
 
 interface SettingState {
-  model: string;
+  apiSpec: string;
   baseUrl: string;
   apiKey: string;
+  models: string[];
+  model: string;
   tmplDir: string;
   templates: string[];
   template: string;
@@ -23,18 +26,41 @@ interface SettingState {
 class Setting extends Component<{}, SettingState> {
   constructor(props: {}) {
     super(props);
-    this.state = { model: '', baseUrl: '', apiKey: '', tmplDir: '', templates: [], template: '', content: '', };
+    this.state = {
+      apiSpec: '',
+      baseUrl: '',
+      apiKey: '',
+      model: '',
+      models: [],
+      tmplDir: '',
+      templates: [],
+      template: '',
+      content: '',
+    };
+    this.initModels();
     this.initConfig();
     this.initTemplates();
   }
 
+  initModels() {
+    fetchModels(false).then((models) => {
+      this.setState({ models: models });
+    });
+  }
+
+  reloadModels = async (e: MouseEvent) => {
+    fetchModels(true).then((models) => {
+      this.setState({ models: models });
+    });
+  }
+
   initConfig() {
     fetchConfig().then(config => {
-      console.info(config)
       this.setState({
-        model: config.model,
+        apiSpec: config.api_spec,
         baseUrl: config.base_url,
         apiKey: config.api_key,
+        model: config.model,
         tmplDir: config.tmpl_dir,
       });
     });
@@ -67,15 +93,21 @@ class Setting extends Component<{}, SettingState> {
   }
 
   saveConfig = async (e: MouseEvent) => {
-    const { model, baseUrl, apiKey, tmplDir } = this.state
-    const config = { 'model': model, 'base_url': baseUrl, 'api_key': apiKey, 'tmpl_dir': tmplDir };
+    const { apiSpec, baseUrl, apiKey, model, tmplDir } = this.state
+    const config = {
+      'api_spec': apiSpec,
+      'base_url': baseUrl,
+      'api_key': apiKey,
+      'model': model,
+      'tmpl_dir': tmplDir
+    };
     updateConfig(JSON.stringify(config)).then(() => {
       alert('Setting Saved!')
     })
   }
 
   render() {
-    const { model: model_names, baseUrl, apiKey, tmplDir, templates, template, content } = this.state;
+    const { apiSpec, baseUrl, apiKey, models, model, tmplDir, templates, template, content } = this.state;
 
     return (
       <div className='column-container'>
@@ -85,7 +117,20 @@ class Setting extends Component<{}, SettingState> {
         <div className='setting-container'>
           <div className='setting'>
             <div>
-              <label>OpenAI API Base URL: </label>
+              <label>API Spec: </label>
+              <input
+                type='text'
+                value={apiSpec}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  this.setState({ apiSpec: e.target.value });
+                }}
+              />
+              <button onClick={this.reloadModels}>Reload Models</button>
+            </div>
+          </div>
+          <div className='setting'>
+            <div>
+              <label>API Base URL: </label>
               <input
                 type='text'
                 value={baseUrl}
@@ -97,7 +142,7 @@ class Setting extends Component<{}, SettingState> {
           </div>
           <div className='setting'>
             <div>
-              <label>OpenAI API Key: </label>
+              <label>API Key: </label>
               <input
                 type='text'
                 value={apiKey}
@@ -110,13 +155,12 @@ class Setting extends Component<{}, SettingState> {
           <div className='setting'>
             <div>
               <label>Model: </label>
-              <input
-                type='text'
-                value={model_names}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  this.setState({ model: e.target.value });
-                }}
-              />
+              <select value={model} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                this.setState({ model: e.target.value })
+              }}>{models.map(model => (
+                <option key={model} value={model}>{model}</option>
+              ))}
+              </select>
             </div>
           </div>
           <div className='setting'>

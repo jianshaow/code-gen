@@ -15,6 +15,11 @@ async function updateConfig(config: string) {
   })
 }
 
+async function fetchModels(reload: boolean) {
+  const url = `${backendBaseUrl}/models?reload=${reload}`
+  return fetch(url).then(response => response.json());
+}
+
 async function fetchTemplates(reload: boolean) {
   const url = `${backendBaseUrl}/template?reload=${reload}`
   return fetch(url).then(response => response.json());
@@ -44,5 +49,5 @@ async function generate(template: string, requirement: string) {
 }
 
 export {
-  fetchConfig, updateConfig, fetchTemplates, fetchTemplate, updateTemplate, generate
+  fetchConfig, updateConfig, fetchModels, fetchTemplates, fetchTemplate, updateTemplate, generate
 }

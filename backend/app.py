@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 
-import config, prompts, generator
+import config, models, prompts, generator
 
 app = Flask(__name__)
 CORS(app)
@@ -48,6 +48,12 @@ def update_config():
     conf = request.get_json()
     config.update_config(conf)
     return "", 204
+
+
+@app.route("/models", methods=["GET"])
+def get_models():
+    reload = request.args.get("reload", "false")
+    return models.get_models(reload == "true"), 200
 
 
 if __name__ == "__main__":
