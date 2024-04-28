@@ -37,19 +37,27 @@ class Setting extends Component<{}, SettingState> {
       template: '',
       content: '',
     };
-    this.initModels();
     this.initConfig();
+    this.initModels();
     this.initTemplates();
   }
 
   initModels() {
     fetchModels(false).then((models) => {
+      const { model } = this.state;
+      if (!models.includes(model)) {
+        models.push(model);
+      }
       this.setState({ models: models });
     });
   }
 
   reloadModels = async (e: MouseEvent) => {
     fetchModels(true).then((models) => {
+      const { model } = this.state;
+      if (!models.includes(model)) {
+        models.push(model);
+      }
       this.setState({ models: models });
     });
   }
@@ -125,7 +133,6 @@ class Setting extends Component<{}, SettingState> {
                   this.setState({ apiSpec: e.target.value });
                 }}
               />
-              <button onClick={this.reloadModels}>Reload Models</button>
             </div>
           </div>
           <div className='setting'>
@@ -161,6 +168,7 @@ class Setting extends Component<{}, SettingState> {
                 <option key={model} value={model}>{model}</option>
               ))}
               </select>
+              <button onClick={this.reloadModels}>Reload Models</button>
             </div>
           </div>
           <div className='setting'>
