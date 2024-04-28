@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
+import { fetchTemplates, generate } from '../services/backend'
 import 'highlight.js/styles/github.css';
 import './Common.css';
 import './Home.css';
@@ -21,21 +22,8 @@ class Home extends Component<{}, HomeState> {
     this.initTemplate();
   }
 
-  async fetchTemplates() {
-    return fetch('http://localhost:5000/template').then(response => response.json());
-  }
-
-  async generate(template: string, requirement: string) {
-    const url = `http://localhost:5000/${template}/generate`
-    return fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'plain/text' },
-      body: requirement,
-    }).then(response => response.text());
-  }
-
   initTemplate() {
-    this.fetchTemplates().then(templates => {
+    fetchTemplates(false).then(templates => {
       this.setState({ templates: templates, template: templates[0] })
     });
   }
@@ -44,7 +32,7 @@ class Home extends Component<{}, HomeState> {
     const { template, requirement } = this.state;
     this.setState({ generated: "" })
 
-    this.generate(template, requirement).then(response => {
+    generate(template, requirement).then(response => {
       this.getMarkdown(response).then((markdown) => {
         this.setState({ generated: markdown });
       });

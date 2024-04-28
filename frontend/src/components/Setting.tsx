@@ -1,5 +1,12 @@
 import { Component, ChangeEvent, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  fetchConfig,
+  updateConfig,
+  fetchTemplates,
+  fetchTemplate,
+  updateTemplate
+} from '../services/backend'
 import './Common.css';
 import './Setting.css';
 
@@ -21,22 +28,8 @@ class Setting extends Component<{}, SettingState> {
     this.initTemplates();
   }
 
-  async fetchConfig() {
-    const url = `http://localhost:5000/config`;
-    return fetch(url).then(response => response.json());
-  }
-
-  async updateConfig(config: string) {
-    const url = `http://localhost:5000/config`;
-    fetch(url, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: config,
-    })
-  }
-
   initConfig() {
-    this.fetchConfig().then(config => {
+    fetchConfig().then(config => {
       console.info(config)
       this.setState({
         model: config.model,
@@ -47,47 +40,28 @@ class Setting extends Component<{}, SettingState> {
     });
   }
 
-  async fetchTemplates(reload: boolean) {
-    const url = `http://localhost:5000/template?reload=${reload}`
-    return fetch(url).then(response => response.json());
-  }
-
-  async fetchTemplate(template: string) {
-    const url = `http://localhost:5000/template/${template}`;
-    return fetch(url).then(response => response.text());
-  }
-
-  async updateTemplate(template: string, content: string) {
-    const url = `http://localhost:5000/template/${template}`;
-    fetch(url, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'plain/text' },
-      body: content,
-    })
-  }
-
   initTemplates() {
-    this.fetchTemplates(false).then(templates => {
+    fetchTemplates(false).then(templates => {
       this.setState({ templates: templates, template: templates[0] });
     });
   }
 
   reloadTemplates = async (e: MouseEvent) => {
-    this.fetchTemplates(true).then(templates => {
+    fetchTemplates(true).then(templates => {
       this.setState({ templates: templates, template: templates[0] });
     });
   }
 
   loadTemplate = async (e: MouseEvent) => {
     const { template } = this.state;
-    this.fetchTemplate(template).then(content => {
+    fetchTemplate(template).then(content => {
       this.setState({ content: content });
     });
   }
 
   saveTemplate = async (e: MouseEvent) => {
     const { template, content } = this.state;
-    this.updateTemplate(template, content).then(() => {
+    updateTemplate(template, content).then(() => {
       alert('Saved!');
     })
   }
@@ -95,7 +69,7 @@ class Setting extends Component<{}, SettingState> {
   saveConfig = async (e: MouseEvent) => {
     const { model, baseUrl, apiKey, tmplDir } = this.state
     const config = { 'model': model, 'base_url': baseUrl, 'api_key': apiKey, 'tmpl_dir': tmplDir };
-    this.updateConfig(JSON.stringify(config)).then(() => {
+    updateConfig(JSON.stringify(config)).then(() => {
       alert('Setting Saved!')
     })
   }
