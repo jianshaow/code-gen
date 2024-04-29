@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, send_from_directory
 from flask_cors import CORS
 
 import config, models, prompts, generator
@@ -7,13 +7,17 @@ import config, models, prompts, generator
 frontend = os.path.abspath(os.path.join("../frontend", "build"))
 frontend = os.environ.get("FRONTEND_DIR", frontend)
 static_folder = os.path.join(frontend, "static")
-app = Flask(__name__, template_folder=frontend, static_folder=static_folder)
+app = Flask(__name__, static_folder=static_folder)
 CORS(app)
 
 
-@app.route("/")
-def main():
-    return render_template("index.html")
+@app.route("/", defaults={"path": ""})
+@app.route("/<path>")
+def main(path):
+    if path == "":
+        return send_from_directory(frontend, "index.html")
+    else:
+        return send_from_directory(frontend, path)
 
 
 @app.route("/<tpl_name>/generate", methods=["POST"])
