@@ -1,14 +1,13 @@
 import os
 from flask import Flask, request, send_from_directory
-from flask_cors import CORS
 
 import config, models, prompts, generator
 
 frontend = os.path.abspath(os.path.join("../frontend", "build"))
 frontend = os.environ.get("FRONTEND_DIR", frontend)
 static_folder = os.path.join(frontend, "static")
+
 app = Flask(__name__, static_folder=static_folder)
-CORS(app)
 
 
 @app.route("/", defaults={"path": ""})
