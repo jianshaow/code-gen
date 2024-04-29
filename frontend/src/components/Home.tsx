@@ -71,17 +71,17 @@ class Home extends Component<{}, HomeState> {
           </select>
         </div>
         <div className='container'>
-          <div className='column-container'>
+          <div className='requirement-block'>
             <label>Requiremenet</label>
-            <textarea className='tpl-area' value={requirement} rows={30}
+            <textarea value={requirement} rows={30}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 this.setState({ requirement: e.target.value });
               }} />
           </div>
           <div className='column-container'>
-            <button className='center' onClick={this.handleGenerateRequest}>=&gt;</button>
+            <button onClick={this.handleGenerateRequest}>=&gt;</button>
           </div>
-          <div className='column-container'>
+          <div className='generated-block'>
             <label>Generated Code</label>
             <div className='markdown-container'>
               <div className='markdown-content' dangerouslySetInnerHTML={{ __html: generated }} />
