@@ -57,7 +57,9 @@ class Home extends Component<{}, HomeState> {
 
     return (
       <div className='column-container'>
-        <Link className='header' to='/setting'>Setting</Link>
+        <div className='header'>
+          <Link to='/setting'>Setting</Link>
+        </div>
         <h1 className='title'>Code Generator</h1>
         <div className='container'>
           <label>Template: </label>

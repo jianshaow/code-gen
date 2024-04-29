@@ -140,7 +140,9 @@ class Setting extends Component<{}, SettingState> {
 
     return (
       <div className='column-container'>
-        <Link className='header' to='/'>Return Home</Link>
+        <div className='header'>
+          <Link to='/'>Return Home</Link>
+        </div>
         <h1 className='title'>Settings</h1>
         <div className='setting'>
           <div>
