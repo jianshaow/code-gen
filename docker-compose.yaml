@@ -1,0 +1,14 @@
+version: "3"
+services:
+  codegen:
+    image: jianshao/codegen-demo:${image_ver}
+    container_name: codegen
+    restart: unless-stopped
+    environment:
+      - PROMPT_TPL_DIR=/home/devel/prompts
+    volumes:
+      - ${prompt_tpl_dir}:/home/devel/prompts
+    ports:
+      - 5000:5000
+    extra_hosts:
+      - host.docker.internal:host-gateway
