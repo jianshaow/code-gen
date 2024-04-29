@@ -60,6 +60,7 @@ def get_config():
 def update_config():
     conf = request.get_json()
     config.update_config(conf)
+    models.setStale()
     return "", 204
 
 
