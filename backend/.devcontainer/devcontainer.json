@@ -1,6 +1,6 @@
 {
 	"name": "CODEGEN-BE",
-	"image": "jianshao/codegen-demo:0.0.1",
+	"image": "jianshao/codegen-dev:0.0.1",
 	"remoteEnv": {
 		"PYTHONPATH": "."
 	},
