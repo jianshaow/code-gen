@@ -14,7 +14,7 @@ CORS(app)
 @app.route("/", defaults={"path": ""})
 @app.route("/<path>")
 def main(path):
-    if path == "":
+    if path == "" or path == "setting":
         return send_from_directory(frontend, "index.html")
     else:
         return send_from_directory(frontend, path)
