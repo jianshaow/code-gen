@@ -23,5 +23,6 @@ docker push jianshao/codegen-demo:$image_tag
 ~~~ shell
 docker run -v $PWD/backend/prompts:/home/devel/prompts \
        -e PROMPT_TPL_DIR=/home/devel/prompts -p 5000:5000 \
+       --add-host=host.docker.internal:host-gateway \
        --rm jianshao/codegen-demo:$image_tag
 ~~~
