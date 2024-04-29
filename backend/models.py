@@ -9,6 +9,14 @@ __client = None
 __models = None
 
 
+def setStale():
+    global __client, __models
+    if __client and not __client.is_closed():
+        __client.close()
+    __client = None
+    __models = None
+
+
 def get_client():
     global __client
     if __client == None:
