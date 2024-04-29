@@ -1,6 +1,8 @@
 import { Component, ChangeEvent, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
+  getBeBaseUrl,
+  setBeBaseUrl,
   fetchConfig,
   updateConfig,
   fetchModels,
@@ -12,6 +14,7 @@ import './Common.css';
 import './Setting.css';
 
 interface SettingState {
+  beBaseUrl: string;
   apiSpec: string;
   baseUrl: string;
   apiKey: string;
@@ -27,6 +30,7 @@ class Setting extends Component<{}, SettingState> {
   constructor(props: {}) {
     super(props);
     this.state = {
+      beBaseUrl: getBeBaseUrl(),
       apiSpec: '',
       baseUrl: '',
       apiKey: '',
@@ -37,10 +41,27 @@ class Setting extends Component<{}, SettingState> {
       template: '',
       content: '',
     };
+    this.initSetting();
+  }
+
+  initSetting() {
     this.initConfig();
     this.initModels();
     this.initTemplates();
   }
+
+  saveBeBaseUrl = async (e: MouseEvent) => {
+    const { beBaseUrl } = this.state;
+    setBeBaseUrl(beBaseUrl);
+    this.initSetting();
+  };
+
+  detectBeBaseUrl = async (e: MouseEvent) => {
+    const protocol = window.location.protocol;
+    const host = window.location.host;
+    const url = `${protocol}//${host}`;
+    this.setState({ beBaseUrl: url })
+  };
 
   initModels() {
     fetchModels(false).then((models) => {
@@ -60,7 +81,7 @@ class Setting extends Component<{}, SettingState> {
       }
       this.setState({ models: models });
     });
-  }
+  };
 
   initConfig() {
     fetchConfig().then(config => {
@@ -84,21 +105,21 @@ class Setting extends Component<{}, SettingState> {
     fetchTemplates(true).then(templates => {
       this.setState({ templates: templates, template: templates[0] });
     });
-  }
+  };
 
   loadTemplate = async (e: MouseEvent) => {
     const { template } = this.state;
     fetchTemplate(template).then(content => {
       this.setState({ content: content });
     });
-  }
+  };
 
   saveTemplate = async (e: MouseEvent) => {
     const { template, content } = this.state;
     updateTemplate(template, content).then(() => {
       alert('Saved!');
     })
-  }
+  };
 
   saveConfig = async (e: MouseEvent) => {
     const { apiSpec, baseUrl, apiKey, model, tplDir } = this.state
@@ -112,16 +133,30 @@ class Setting extends Component<{}, SettingState> {
     updateConfig(JSON.stringify(config)).then(() => {
       alert('Setting Saved!')
     })
-  }
+  };
 
   render() {
-    const { apiSpec, baseUrl, apiKey, models, model, tplDir, templates, template, content } = this.state;
+    const { beBaseUrl, apiSpec, baseUrl, apiKey, models, model, tplDir, templates, template, content } = this.state;
 
     return (
       <div className='column-container'>
         <Link className='header' to='/'>Return Home</Link>
         <h1 className='title'>Settings</h1>
-        <label className='title'>General</label>
+        <div className='setting'>
+          <div>
+            <label>Backend Base URL: </label>
+            <input
+              type='text'
+              value={beBaseUrl}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                this.setState({ beBaseUrl: e.target.value });
+              }}
+            />
+            <button onClick={this.saveBeBaseUrl}>Save</button>
+            <button onClick={this.detectBeBaseUrl}>Detect</button>
+          </div>
+        </div>
+        <label className='title'>Backend</label>
         <div className='setting-container'>
           <div className='setting'>
             <div>
