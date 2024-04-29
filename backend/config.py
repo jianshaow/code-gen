@@ -1,9 +1,9 @@
 import os
 
 api_spec = os.environ.get("API_SPEC", "ollama")
-base_url = os.environ.get("OPENAI_API_BASE")
+base_url = os.environ.get("OPENAI_API_BASE", "http://host.docker.internal:11434/v1")
 api_key = os.environ.get("OPENAI_API_KEY", "EMPTY")
-model = os.environ.get("OPENAI_MODEL", "gpt-3.5-turbo")
+model = os.environ.get("OPENAI_MODEL", "deepseek-coder:6.7b")
 tpl_dir = os.environ.get("PROMPT_TPL_DIR", "prompts")
 
 
