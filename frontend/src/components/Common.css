@@ -8,10 +8,12 @@
   text-align: left;
 }
 
+.config-lable {
+  margin-right: 5px;
+}
+
 .container {
   display: flex;
-  justify-content: left;
-  align-items: top;
   margin: 0 20px;
 }
 

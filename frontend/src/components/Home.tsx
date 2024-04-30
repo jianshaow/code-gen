@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
-import { fetchTemplates, generate } from '../services/backend'
+import { fetchConfig, fetchTemplates, generate } from '../services/backend'
 import 'highlight.js/styles/github.css';
 import './Common.css';
 import './Home.css';
 
 interface HomeState {
+  model: string;
   templates: string[];
   template: string;
   requirement: string;
@@ -18,8 +19,17 @@ interface HomeState {
 class Home extends Component<{}, HomeState> {
   constructor(props: {}) {
     super(props);
-    this.state = { templates: [], template: '', requirement: 'make an example', generated: '' }
+    this.state = { model: "", templates: [], template: '', requirement: 'make an example', generated: '' };
+    this.initConfig();
     this.initTemplate();
+  }
+
+  initConfig() {
+    fetchConfig().then(config => {
+      this.setState({
+        model: config.model,
+      });
+    });
   }
 
   initTemplate() {
@@ -37,7 +47,7 @@ class Home extends Component<{}, HomeState> {
         this.setState({ generated: markdown });
       });
     });
-  }
+  };
 
   async getMarkdown(mdContent: string) {
     const marked = new Marked(
@@ -53,7 +63,7 @@ class Home extends Component<{}, HomeState> {
   }
 
   render() {
-    const { templates, template, requirement, generated } = this.state;
+    const { model, templates, template, requirement, generated } = this.state;
 
     return (
       <div className='column-container'>
@@ -62,7 +72,9 @@ class Home extends Component<{}, HomeState> {
         </div>
         <h1 className='title'>Code Generator</h1>
         <div className='container'>
-          <label>Template: </label>
+          <label className='config-lable'>Model: </label>
+          <input value={model} readOnly style={{ marginRight: '5px' }} />
+          <label className='config-lable'>Template: </label>
           <select value={template} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
             this.setState({ template: e.target.value })
           }}>{templates.map(data => (

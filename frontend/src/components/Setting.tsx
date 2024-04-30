@@ -146,7 +146,7 @@ class Setting extends Component<{}, SettingState> {
         <h1 className='title'>Settings</h1>
         <div className='setting'>
           <div>
-            <label>Backend Base URL: </label>
+            <label className='config-lable'>Backend Base URL: </label>
             <input
               type='text'
               value={beBaseUrl}
@@ -162,7 +162,7 @@ class Setting extends Component<{}, SettingState> {
         <div className='setting-container'>
           <div className='setting'>
             <div>
-              <label>API Spec: </label>
+              <label className='config-lable'>API Spec: </label>
               <input
                 type='text'
                 value={apiSpec}
@@ -174,7 +174,7 @@ class Setting extends Component<{}, SettingState> {
           </div>
           <div className='setting'>
             <div>
-              <label>API Base URL: </label>
+              <label className='config-lable'>API Base URL: </label>
               <input
                 type='text'
                 value={baseUrl}
@@ -186,7 +186,7 @@ class Setting extends Component<{}, SettingState> {
           </div>
           <div className='setting'>
             <div>
-              <label>API Key: </label>
+              <label className='config-lable'>API Key: </label>
               <input
                 type='text'
                 value={apiKey}
@@ -198,7 +198,7 @@ class Setting extends Component<{}, SettingState> {
           </div>
           <div className='setting'>
             <div>
-              <label>Model: </label>
+              <label className='config-lable'>Model: </label>
               <select value={model} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                 this.setState({ model: e.target.value })
               }}>{models.map(model => (
@@ -210,7 +210,7 @@ class Setting extends Component<{}, SettingState> {
           </div>
           <div className='setting'>
             <div>
-              <label>Template Dir: </label>
+              <label className='config-lable'>Template Dir: </label>
               <input
                 type='text'
                 value={tplDir}
@@ -230,7 +230,7 @@ class Setting extends Component<{}, SettingState> {
         <div className='setting'>
           <div>
             <button onClick={this.reloadTemplates}>Reload</button>
-            <label>Template: </label>
+            <label className='config-lable'>Template: </label>
             <select value={template} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
               this.setState({ template: e.target.value })
             }}>{templates.map(template => (
