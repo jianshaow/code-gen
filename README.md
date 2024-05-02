@@ -1,5 +1,7 @@
 # codegen-demo
 
+Demo a code generator with natural language.
+
 ## build react frontend
 ~~~shell
 # install dependencies
