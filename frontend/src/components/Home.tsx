@@ -19,7 +19,7 @@ interface HomeState {
 class Home extends Component<{}, HomeState> {
   constructor(props: {}) {
     super(props);
-    this.state = { model: "", templates: [], template: '', requirement: 'make an example', generated: '' };
+    this.state = { model: '', templates: [], template: '', requirement: 'make an example', generated: '' };
     this.initConfig();
     this.initTemplate();
   }
@@ -40,7 +40,7 @@ class Home extends Component<{}, HomeState> {
 
   handleGenerateRequest = async (e: MouseEvent) => {
     const { template, requirement } = this.state;
-    this.setState({ generated: "" })
+    this.setState({ generated: '' })
 
     generate(template, requirement).then(response => {
       this.getMarkdown(response).then((markdown) => {
