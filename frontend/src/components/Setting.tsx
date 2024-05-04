@@ -50,13 +50,13 @@ class Setting extends Component<{}, SettingState> {
     this.initTemplates();
   }
 
-  saveBeBaseUrl = async (e: MouseEvent) => {
+  handleSaveBeBaseUrl = async (e: MouseEvent) => {
     const { beBaseUrl } = this.state;
     setBeBaseUrl(beBaseUrl);
     this.initSetting();
   };
 
-  detectBeBaseUrl = async (e: MouseEvent) => {
+  handleDetectBeBaseUrl = async (e: MouseEvent) => {
     const protocol = window.location.protocol;
     const host = window.location.host;
     const url = `${protocol}//${host}`;
@@ -73,7 +73,7 @@ class Setting extends Component<{}, SettingState> {
     });
   }
 
-  reloadModels = async (e: MouseEvent) => {
+  handleReloadModels = async (e: MouseEvent) => {
     fetchModels(true).then((models) => {
       const { model } = this.state;
       if (!models.includes(model)) {
@@ -101,27 +101,27 @@ class Setting extends Component<{}, SettingState> {
     });
   }
 
-  reloadTemplates = async (e: MouseEvent) => {
+  handelReloadTemplates = async (e: MouseEvent) => {
     fetchTemplates(true).then(templates => {
       this.setState({ templates: templates, template: templates[0] });
     });
   };
 
-  loadTemplate = async (e: MouseEvent) => {
+  handleLoadTemplate = async (e: MouseEvent) => {
     const { template } = this.state;
     fetchTemplate(template).then(content => {
       this.setState({ content: content });
     });
   };
 
-  saveTemplate = async (e: MouseEvent) => {
+  handleSaveTemplate = async (e: MouseEvent) => {
     const { template, content } = this.state;
     updateTemplate(template, content).then(() => {
       alert('Saved!');
     })
   };
 
-  saveConfig = async (e: MouseEvent) => {
+  handleSaveConfig = async (e: MouseEvent) => {
     const { apiSpec, baseUrl, apiKey, model, tplDir } = this.state
     const config = {
       'api_spec': apiSpec,
@@ -139,7 +139,7 @@ class Setting extends Component<{}, SettingState> {
     const { beBaseUrl, apiSpec, baseUrl, apiKey, models, model, tplDir, templates, template, content } = this.state;
 
     return (
-      <div className='column-container'>
+      <div className='container-column'>
         <div className='header'>
           <Link to='/'>Return Home</Link>
         </div>
@@ -154,8 +154,8 @@ class Setting extends Component<{}, SettingState> {
                 this.setState({ beBaseUrl: e.target.value });
               }}
             />
-            <button onClick={this.saveBeBaseUrl}>Save</button>
-            <button onClick={this.detectBeBaseUrl}>Detect</button>
+            <button onClick={this.handleSaveBeBaseUrl}>Save</button>
+            <button onClick={this.handleDetectBeBaseUrl}>Detect</button>
           </div>
         </div>
         <label className='title'>Backend</label>
@@ -205,7 +205,7 @@ class Setting extends Component<{}, SettingState> {
                 <option key={model} value={model}>{model}</option>
               ))}
               </select>
-              <button onClick={this.reloadModels}>Reload Models</button>
+              <button onClick={this.handleReloadModels}>Reload Models</button>
             </div>
           </div>
           <div className='setting'>
@@ -222,14 +222,14 @@ class Setting extends Component<{}, SettingState> {
           </div>
           <div className='setting'>
             <div>
-              <button onClick={this.saveConfig}>Save Setting</button>
+              <button onClick={this.handleSaveConfig}>Save Setting</button>
             </div>
           </div>
         </div>
         <label className='title'>Template</label>
         <div className='setting'>
           <div>
-            <button onClick={this.reloadTemplates}>Reload</button>
+            <button onClick={this.handelReloadTemplates}>Reload</button>
             <label className='config-lable'>Template: </label>
             <select value={template} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
               this.setState({ template: e.target.value })
@@ -237,8 +237,8 @@ class Setting extends Component<{}, SettingState> {
               <option key={template} value={template}>{template}</option>
             ))}
             </select>
-            <button onClick={this.loadTemplate}>Load</button>
-            <button onClick={this.saveTemplate}>Save</button>
+            <button onClick={this.handleLoadTemplate}>Load</button>
+            <button onClick={this.handleSaveTemplate}>Save</button>
           </div>
           <textarea value={content} rows={20}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {

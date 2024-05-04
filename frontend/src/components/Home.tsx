@@ -38,7 +38,7 @@ class Home extends Component<{}, HomeState> {
     });
   }
 
-  handleGenerateRequest = async (e: MouseEvent) => {
+  handleGenerate = async (e: MouseEvent) => {
     const { template, requirement } = this.state;
     this.setState({ generated: '' })
 
@@ -66,7 +66,7 @@ class Home extends Component<{}, HomeState> {
     const { model, templates, template, requirement, generated } = this.state;
 
     return (
-      <div className='column-container'>
+      <div className='container-column'>
         <div className='header'>
           <Link to='/setting'>Setting</Link>
         </div>
@@ -90,8 +90,8 @@ class Home extends Component<{}, HomeState> {
                 this.setState({ requirement: e.target.value });
               }} />
           </div>
-          <div className='column-container'>
-            <button onClick={this.handleGenerateRequest}>=&gt;</button>
+          <div className='container-column'>
+            <button onClick={this.handleGenerate}>=&gt;</button>
           </div>
           <div className='generated-block'>
             <label>Generated Code</label>

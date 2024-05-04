@@ -17,7 +17,7 @@
   margin: 0 20px;
 }
 
-.column-container {
+.container-column {
   display: flex;
   flex-direction: column;
   justify-content: center;
