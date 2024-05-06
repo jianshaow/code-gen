@@ -163,13 +163,13 @@ class Setting extends Component<{}, SettingState> {
           <div className='setting'>
             <div>
               <label className='config-lable'>API Spec: </label>
-              <input
-                type='text'
-                value={apiSpec}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  this.setState({ apiSpec: e.target.value });
-                }}
-              />
+              <select value={apiSpec} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                this.setState({ apiSpec: e.target.value })
+              }}>
+                <option key='ollama' value='ollama'>ollama</option>
+                <option key='openai' value='openai'>openai</option>
+                <option key='gemini' value='gemini'>gemini</option>
+              </select>
             </div>
           </div>
           <div className='setting'>

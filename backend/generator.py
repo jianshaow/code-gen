@@ -1,13 +1,9 @@
-import config, prompts, models
+import prompts, models
 
 
 def generate(tpl_name, requirement):
     prompt = prompts.get_prompt(tpl_name, requirement)
-    client = models.get_client()
-    completion = client.chat.completions.create(
-        model=config.model, messages=[{"role": "user", "content": prompt}]
-    )
-    return completion.choices[0].message.content
+    return models.generate(prompt)
 
 
 if __name__ == "__main__":
