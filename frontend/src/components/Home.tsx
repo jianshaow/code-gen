@@ -9,6 +9,7 @@ import './Common.css';
 import './Home.css';
 
 interface HomeState {
+  apiSpec: string;
   model: string;
   templates: string[];
   template: string;
@@ -19,7 +20,7 @@ interface HomeState {
 class Home extends Component<{}, HomeState> {
   constructor(props: {}) {
     super(props);
-    this.state = { model: '', templates: [], template: '', requirement: 'make an example', generated: '' };
+    this.state = { apiSpec: '', model: '', templates: [], template: '', requirement: 'make an example', generated: '' };
     this.initConfig();
     this.initTemplate();
   }
@@ -27,6 +28,7 @@ class Home extends Component<{}, HomeState> {
   initConfig() {
     fetchConfig().then(config => {
       this.setState({
+        apiSpec: config.api_spec,
         model: config.model,
       });
     });
@@ -63,7 +65,7 @@ class Home extends Component<{}, HomeState> {
   }
 
   render() {
-    const { model, templates, template, requirement, generated } = this.state;
+    const { apiSpec, model, templates, template, requirement, generated } = this.state;
 
     return (
       <div className='container-column'>
@@ -72,6 +74,8 @@ class Home extends Component<{}, HomeState> {
         </div>
         <h1 className='title'>Code Generator</h1>
         <div className='container'>
+          <label className='config-lable'>API Spec: </label>
+          <input value={apiSpec} readOnly style={{ width: 60, marginRight: '5px' }} />
           <label className='config-lable'>Model: </label>
           <input value={model} readOnly style={{ marginRight: '5px' }} />
           <label className='config-lable'>Template: </label>
