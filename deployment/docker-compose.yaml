@@ -5,9 +5,14 @@ services:
     container_name: codegen
     restart: unless-stopped
     environment:
+      - https_proxy=${https_proxy}
       - PROMPT_TPL_DIR=/home/devel/prompts
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_BASE=${OPENAI_API_BASE}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
     volumes:
       - ${prompt_tpl_dir}:/home/devel/prompts
+      - ${HOME}/.config:/home/devel/.config
     ports:
       - 5000:5000
     extra_hosts:
