@@ -15,12 +15,16 @@ interface HomeState {
   template: string;
   requirement: string;
   generated: string;
+  highlighted: string;
 }
 
 class Home extends Component<{}, HomeState> {
   constructor(props: {}) {
     super(props);
-    this.state = { apiSpec: '', model: '', templates: [], template: '', requirement: 'make an example', generated: '' };
+    this.state = {
+      apiSpec: '', model: '', templates: [], template: '',
+      requirement: 'make an example', generated: '', highlighted: ''
+    };
     this.initConfig();
     this.initTemplate();
   }
@@ -44,14 +48,15 @@ class Home extends Component<{}, HomeState> {
     const { template, requirement } = this.state;
     this.setState({ generated: '' })
 
-    generate(template, requirement).then(response => {
-      this.getMarkdown(response).then((markdown) => {
-        this.setState({ generated: markdown });
+    generate(template, requirement).then(generated => {
+      this.getHighlightedMarkdown(generated).then((highlighted) => {
+        this.setState({ generated: generated });
+        this.setState({ highlighted: highlighted });
       });
     });
   };
 
-  async getMarkdown(mdContent: string) {
+  async getHighlightedMarkdown(mdContent: string) {
     const marked = new Marked(
       markedHighlight({
         langPrefix: 'hljs language-',
@@ -65,7 +70,7 @@ class Home extends Component<{}, HomeState> {
   }
 
   render() {
-    const { apiSpec, model, templates, template, requirement, generated } = this.state;
+    const { apiSpec, model, templates, template, requirement, generated, highlighted } = this.state;
 
     return (
       <div className='container-column'>
@@ -98,9 +103,14 @@ class Home extends Component<{}, HomeState> {
             <button onClick={this.handleGenerate}>=&gt;</button>
           </div>
           <div className='generated-block'>
-            <label>Generated Code</label>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <label>Generated Code</label>
+              <button onClick={async (e: MouseEvent) => {
+                navigator.clipboard.writeText(generated);
+              }} style={{ 'textAlign': 'right' }}>Copy</button>
+            </div>
             <div className='markdown-container'>
-              <div className='markdown-content' dangerouslySetInnerHTML={{ __html: generated }} />
+              <div className='markdown-content' dangerouslySetInnerHTML={{ __html: highlighted }} />
             </div>
           </div>
         </div>
