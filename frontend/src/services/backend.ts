@@ -26,6 +26,11 @@ async function updateConfig(config: string) {
   })
 }
 
+async function fetchApiSpecs() {
+  const url = `${getBeBaseUrl()}/api_specs`
+  return fetch(url).then(response => response.json());
+}
+
 async function fetchModels(reload: boolean) {
   const url = `${getBeBaseUrl()}/models?reload=${reload}`
   return fetch(url).then(response => response.json());
@@ -64,6 +69,7 @@ export {
   setBeBaseUrl,
   fetchConfig,
   updateConfig,
+  fetchApiSpecs,
   fetchModels,
   fetchTemplates,
   fetchTemplate,

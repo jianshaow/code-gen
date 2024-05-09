@@ -31,6 +31,11 @@
   margin: 0 10px;
 }
 
+.success {
+  margin: 0 10px;
+  color: green;
+}
+
 .divider {
   width: 100%;
   height: 1px;

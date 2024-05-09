@@ -16,6 +16,7 @@ interface HomeState {
   requirement: string;
   generated: string;
   highlighted: string;
+  copied: boolean;
 }
 
 class Home extends Component<{}, HomeState> {
@@ -23,7 +24,8 @@ class Home extends Component<{}, HomeState> {
     super(props);
     this.state = {
       apiSpec: '', model: '', templates: [], template: '',
-      requirement: 'make an example', generated: '', highlighted: ''
+      requirement: 'make an example', generated: '',
+      highlighted: '', copied: false,
     };
     this.initConfig();
     this.initTemplate();
@@ -46,7 +48,7 @@ class Home extends Component<{}, HomeState> {
 
   handleGenerate = async (e: MouseEvent) => {
     const { template, requirement } = this.state;
-    this.setState({ generated: '' })
+    this.setState({ highlighted: '' })
 
     generate(template, requirement).then(generated => {
       this.getHighlightedMarkdown(generated).then((highlighted) => {
@@ -70,7 +72,7 @@ class Home extends Component<{}, HomeState> {
   }
 
   render() {
-    const { apiSpec, model, templates, template, requirement, generated, highlighted } = this.state;
+    const { apiSpec, model, templates, template, requirement, generated, highlighted, copied } = this.state;
 
     return (
       <div className='container-column'>
@@ -105,9 +107,16 @@ class Home extends Component<{}, HomeState> {
           <div className='generated-block'>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <label>Generated Code</label>
-              <button onClick={async (e: MouseEvent) => {
-                navigator.clipboard.writeText(generated);
-              }} style={{ 'textAlign': 'right' }}>Copy</button>
+              <div>
+                {copied && <label className='success'>Copied</label>}
+                <button onClick={async (e: MouseEvent) => {
+                  navigator.clipboard.writeText(generated);
+                  this.setState({ copied: true });
+                  setTimeout(() => {
+                    this.setState({ copied: false });
+                  }, 2000);
+                }} style={{ 'textAlign': 'right' }}>Copy</button>
+              </div>
             </div>
             <div className='markdown-container'>
               <div className='markdown-content' dangerouslySetInnerHTML={{ __html: highlighted }} />

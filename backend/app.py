@@ -63,6 +63,11 @@ def update_config():
     return "", 204
 
 
+@app.route("/api_specs", methods=["GET"])
+def get_api_specs():
+    return models.get_api_specs(), 200
+
+
 @app.route("/models", methods=["GET"])
 def get_models():
     reload = request.args.get("reload", "false")

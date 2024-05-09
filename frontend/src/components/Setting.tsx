@@ -5,6 +5,7 @@ import {
   setBeBaseUrl,
   fetchConfig,
   updateConfig,
+  fetchApiSpecs,
   fetchModels,
   fetchTemplates,
   fetchTemplate,
@@ -15,6 +16,7 @@ import './Setting.css';
 
 interface SettingState {
   beBaseUrl: string;
+  apiSpecs: string[];
   apiSpec: string;
   baseUrl: string;
   apiKey: string;
@@ -31,6 +33,7 @@ class Setting extends Component<{}, SettingState> {
     super(props);
     this.state = {
       beBaseUrl: getBeBaseUrl(),
+      apiSpecs: [],
       apiSpec: '',
       baseUrl: '',
       apiKey: '',
@@ -46,6 +49,7 @@ class Setting extends Component<{}, SettingState> {
 
   initSetting() {
     this.initConfig();
+    this.initApiSpecs()
     this.initModels();
     this.initTemplates();
   }
@@ -62,6 +66,12 @@ class Setting extends Component<{}, SettingState> {
     const url = `${protocol}//${host}`;
     this.setState({ beBaseUrl: url })
   };
+
+  initApiSpecs() {
+    fetchApiSpecs().then((apiSpecs) => {
+      this.setState({ apiSpecs: apiSpecs });
+    });
+  }
 
   initModels() {
     fetchModels(false).then((models) => {
@@ -136,7 +146,7 @@ class Setting extends Component<{}, SettingState> {
   };
 
   render() {
-    const { beBaseUrl, apiSpec, baseUrl, apiKey, models, model, tplDir, templates, template, content } = this.state;
+    const { beBaseUrl, apiSpecs, apiSpec, baseUrl, apiKey, models, model, tplDir, templates, template, content } = this.state;
 
     return (
       <div className='container-column'>
@@ -165,10 +175,9 @@ class Setting extends Component<{}, SettingState> {
               <label className='config-lable'>API Spec: </label>
               <select value={apiSpec} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                 this.setState({ apiSpec: e.target.value })
-              }}>
-                <option key='ollama' value='ollama'>ollama</option>
-                <option key='openai' value='openai'>openai</option>
-                <option key='gemini' value='gemini'>gemini</option>
+              }}>{apiSpecs.map(apiSpec => (
+                <option key={apiSpec} value={apiSpec}>{apiSpec}</option>
+              ))}
               </select>
             </div>
           </div>

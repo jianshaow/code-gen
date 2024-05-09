@@ -1,4 +1,4 @@
-import requests
+import os, requests
 from urllib.parse import urlsplit
 from urllib.error import HTTPError
 from openai import OpenAI
@@ -48,21 +48,39 @@ def get_models(reload=False):
         elif api_spec == "gemini":
             models = [model.name for model in list_models()]
         elif api_spec == "ollama":
-            base_url = __get_ollama_base_url()
-            if base_url:
-                url = "{base_url}/api/tags".format(base_url=base_url)
-                response = requests.get(url)
-                if response.status_code == 200:
-                    json_data = response.json()
-                    models = [obj["name"] for obj in json_data["models"]]
-                else:
-                    raise HTTPError(
-                        url=url, code=response.status_code, msg="call ollama api fail"
-                    )
+            models = __get_ollama_models()
         else:
             raise NotImplementedError(f"not supported spec {config.api_spec}")
 
     return models != None and models or []
+
+
+def __get_ollama_base_url():
+    if config.base_url:
+        parsed_url = urlsplit(config.base_url)
+        return f"{parsed_url.scheme}://{parsed_url.netloc}"
+    else:
+        return None
+
+
+def __get_ollama_models():
+    base_url = __get_ollama_base_url()
+    if base_url:
+        url = "{base_url}/api/tags".format(base_url=base_url)
+        response = requests.get(url)
+        if response.status_code == 200:
+            json_data = response.json()
+            return [obj["name"] for obj in json_data["models"]]
+        else:
+            raise HTTPError(
+                url=url, code=response.status_code, msg="call ollama api fail"
+            )
+    return None
+
+
+def get_api_specs():
+    api_specs_str = os.environ.get("MODEL_API_SPECS", "ollama,openai,gemini")
+    return api_specs_str.split(",")
 
 
 def generate(prompt: str):
@@ -77,13 +95,6 @@ def generate(prompt: str):
     return result
 
 
-def __get_ollama_base_url():
-    if config.base_url:
-        parsed_url = urlsplit(config.base_url)
-        return f"{parsed_url.scheme}://{parsed_url.netloc}"
-    else:
-        return None
-
-
 if __name__ == "__main__":
+    print(get_api_specs())
     print(get_models())
