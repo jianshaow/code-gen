@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, send_from_directory
 
-import config, models, prompts, generator
+import config, prompts, generator
 
 frontend = os.path.abspath(os.path.join("../frontend", "build"))
 frontend = os.environ.get("FRONTEND_DIR", frontend)
@@ -64,7 +64,7 @@ def update_config():
 
 @app.route("/api_spec", methods=["GET"])
 def get_api_specs():
-    return models.get_api_specs(), 200
+    return generator.get_api_specs(), 200
 
 
 @app.route("/api_spec/<api_spec>", methods=["GET"])
@@ -76,14 +76,14 @@ def get_api_config(api_spec):
 def update_api_config(api_spec):
     conf = request.get_json()
     config.update_api_config(api_spec, conf)
-    models.setStale(api_spec)
+    generator.setStale(api_spec)
     return "", 204
 
 
 @app.route("/models", methods=["GET"])
 def get_models():
     reload = request.args.get("reload", "false")
-    return models.get_models(reload == "true"), 200
+    return generator.get_models(reload == "true"), 200
 
 
 if __name__ == "__main__":

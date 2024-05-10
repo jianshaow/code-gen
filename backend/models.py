@@ -1,82 +1,50 @@
 import requests
-from urllib.parse import urlsplit
 from urllib.error import HTTPError
 from openai import OpenAI
-from google.generativeai import GenerativeModel, list_models
+import google.generativeai as genai
 
 import config
 
-__clients = {}
-__model_lists = {}
+
+def get_api_specs():
+    return ["ollama", "openai", "google"]
 
 
-def setStale(api_spec):
-    __clients.pop(api_spec)
-    __model_lists.pop(api_spec)
-
-
-def get_client():
-    api_spec = config.api_spec
-    client = __clients.get(api_spec)
-    if client == None:
-        if api_spec == "openai":
-            client = __openai_client()
-        elif api_spec == "ollama":
-            client = __ollama_client()
-        elif api_spec == "google":
-            client = __google_client()
-        __clients[api_spec] = client
-    return client
-
-
-def __ollama_client():
+def openai_client(base_url, api_key):
     return OpenAI(
-        base_url=config.ollama_base_url,
-        api_key=config.ollama_api_key,
+        base_url=base_url,
+        api_key=api_key,
     )
 
 
-def __openai_client():
-    return OpenAI(
-        base_url=config.openai_base_url,
-        api_key=config.openai_api_key,
+def openai_models(client: OpenAI):
+    return [obj.id for obj in client.models.list().data]
+
+
+def openai_generate(client: OpenAI, prompt: str):
+    completion = client.chat.completions.create(
+        model=config.get_model(), messages=[{"role": "user", "content": prompt}]
     )
+    return completion.choices[0].message.content
 
 
-def __google_client():
-    return GenerativeModel(model_name=config.get_model())
+def google_model(model_name: str):
+    return genai.GenerativeModel(model_name=model_name)
 
 
-def get_models(reload=False):
-    api_spec = config.api_spec
-    models = __model_lists.get(api_spec)
-    if models == None or reload:
-        if api_spec == "openai":
-            models = [obj.id for obj in get_client().models.list().data]
-        elif api_spec == "google":
-            models = [model.name for model in list_models()]
-        elif api_spec == "ollama":
-            models = __get_ollama_models()
-        else:
-            raise NotImplementedError(f"not supported spec {config.api_spec}")
-
-    return models != None and models or []
+def google_models():
+    return [model.name for model in genai.list_models()]
 
 
-def __get_ollama_base_url():
-    if config.openai_base_url:
-        parsed_url = urlsplit(config.ollama_base_url)
-        return f"{parsed_url.scheme}://{parsed_url.netloc}"
-    else:
-        return None
+def google_generate(model: genai.GenerativeModel, prompt: str):
+    return model.generate_content(prompt).text
 
 
-def __get_ollama_models():
-    base_url = __get_ollama_base_url()
+def ollama_models(base_url: str):
     if base_url:
         url = "{base_url}/api/tags".format(base_url=base_url)
         response = requests.get(url)
-        if response.status_code == 200:
+        if response.ok:
             json_data = response.json()
             return [obj["name"] for obj in json_data["models"]]
         else:
@@ -86,22 +54,5 @@ def __get_ollama_models():
     return None
 
 
-def get_api_specs():
-    return ["ollama", "openai", "google"]
-
-
-def generate(prompt: str):
-    client = get_client()
-    if isinstance(client, OpenAI):
-        completion = client.chat.completions.create(
-            model=config.get_model(), messages=[{"role": "user", "content": prompt}]
-        )
-        result = completion.choices[0].message.content
-    elif isinstance(client, GenerativeModel):
-        result = client.generate_content(prompt).text
-    return result
-
-
 if __name__ == "__main__":
     print(get_api_specs())
-    print(get_models())

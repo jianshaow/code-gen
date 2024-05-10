@@ -9,8 +9,6 @@ openai_base_url = os.environ.get(
 openai_api_key = os.environ.get("OPENAI_API_KEY", "EMPTY")
 openai_model = os.environ.get("OPENAI_MODEL", "gpt-3.5-turbo")
 
-google_base_url = os.environ.get("GOOGLE_API_BASE")
-google_api_key = os.environ.get("GOOGLE_API_KEY")
 google_model = os.environ.get("GOOGLE_MODEL", "models/gemini-pro")
 
 ollama_base_url = os.environ.get(
@@ -42,8 +40,8 @@ def get_api_config(api_spec: str):
         }
     if api_spec == "google":
         return {
-            "base_url": google_base_url,
-            "api_key": google_api_key,
+            "base_url": None,
+            "api_key": os.environ.get("GOOGLE_API_KEY"),
             "model": google_model,
         }
     if api_spec == "ollama":
@@ -64,13 +62,20 @@ def update_api_config(api_spec: str, conf: dict):
         openai_api_key = conf.get("api_key")
         openai_model = conf.get("model")
     if api_spec == "google":
-        google_base_url = conf.get("base_url")
-        google_api_key = conf.get("api_key")
+        os.environ["GOOGLE_API_KEY"] = conf.get("api_key")
         google_model = conf.get("model")
     if api_spec == "ollama":
         ollama_base_url = conf.get("base_url")
         ollama_api_key = conf.get("api_key")
         ollama_model = conf.get("model")
+
+
+def get_api_key():
+    return get_api_config(api_spec).get("api_key")
+
+
+def get_base_url():
+    return get_api_config(api_spec).get("base_url")
 
 
 def get_model():
