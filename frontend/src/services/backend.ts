@@ -27,8 +27,22 @@ async function updateConfig(config: string) {
 }
 
 async function fetchApiSpecs() {
-  const url = `${getBeBaseUrl()}/api_specs`
+  const url = `${getBeBaseUrl()}/api_spec`
   return fetch(url).then(response => response.json());
+}
+
+async function fetchApiConfig(api_spec: string) {
+  const url = `${getBeBaseUrl()}/api_spec/${api_spec}`;
+  return fetch(url).then(response => response.json());
+}
+
+async function updateApiConfig(api_spec: string, config: string) {
+  const url = `${getBeBaseUrl()}/api_spec/${api_spec}`;
+  fetch(url, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: config,
+  })
 }
 
 async function fetchModels(reload: boolean) {
@@ -69,6 +83,8 @@ export {
   setBeBaseUrl,
   fetchConfig,
   updateConfig,
+  fetchApiConfig,
+  updateApiConfig,
   fetchApiSpecs,
   fetchModels,
   fetchTemplates,

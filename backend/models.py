@@ -1,4 +1,4 @@
-import os, requests
+import requests
 from urllib.parse import urlsplit
 from urllib.error import HTTPError
 from openai import OpenAI
@@ -10,33 +10,41 @@ __clients = {}
 __model_lists = {}
 
 
-def setStale():
-    global __clients, __models
-    __clients.clear()
-    __model_lists.clear()
+def setStale(api_spec):
+    __clients.pop(api_spec)
+    __model_lists.pop(api_spec)
 
 
 def get_client():
     api_spec = config.api_spec
     client = __clients.get(api_spec)
     if client == None:
-        if api_spec == "openai" or api_spec == "ollama":
+        if api_spec == "openai":
             client = __openai_client()
-        elif api_spec == "gemini":
-            client = __gemini_client()
+        elif api_spec == "ollama":
+            client = __ollama_client()
+        elif api_spec == "google":
+            client = __google_client()
         __clients[api_spec] = client
     return client
 
 
-def __openai_client():
+def __ollama_client():
     return OpenAI(
-        base_url=config.base_url,
-        api_key=config.api_key,
+        base_url=config.ollama_base_url,
+        api_key=config.ollama_api_key,
     )
 
 
-def __gemini_client():
-    return GenerativeModel()
+def __openai_client():
+    return OpenAI(
+        base_url=config.openai_base_url,
+        api_key=config.openai_api_key,
+    )
+
+
+def __google_client():
+    return GenerativeModel(model_name=config.get_model())
 
 
 def get_models(reload=False):
@@ -45,7 +53,7 @@ def get_models(reload=False):
     if models == None or reload:
         if api_spec == "openai":
             models = [obj.id for obj in get_client().models.list().data]
-        elif api_spec == "gemini":
+        elif api_spec == "google":
             models = [model.name for model in list_models()]
         elif api_spec == "ollama":
             models = __get_ollama_models()
@@ -56,8 +64,8 @@ def get_models(reload=False):
 
 
 def __get_ollama_base_url():
-    if config.base_url:
-        parsed_url = urlsplit(config.base_url)
+    if config.openai_base_url:
+        parsed_url = urlsplit(config.ollama_base_url)
         return f"{parsed_url.scheme}://{parsed_url.netloc}"
     else:
         return None
@@ -79,15 +87,14 @@ def __get_ollama_models():
 
 
 def get_api_specs():
-    api_specs_str = os.environ.get("MODEL_API_SPECS", "ollama,openai,gemini")
-    return api_specs_str.split(",")
+    return ["ollama", "openai", "google"]
 
 
 def generate(prompt: str):
     client = get_client()
     if isinstance(client, OpenAI):
         completion = client.chat.completions.create(
-            model=config.model, messages=[{"role": "user", "content": prompt}]
+            model=config.get_model(), messages=[{"role": "user", "content": prompt}]
         )
         result = completion.choices[0].message.content
     elif isinstance(client, GenerativeModel):

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
-import { fetchConfig, fetchTemplates, generate } from '../services/backend'
+import { fetchConfig, fetchApiConfig, fetchTemplates, generate } from '../services/backend'
 import 'highlight.js/styles/github.css';
 import './Common.css';
 import './Home.css';
@@ -35,7 +35,11 @@ class Home extends Component<{}, HomeState> {
     fetchConfig().then(config => {
       this.setState({
         apiSpec: config.api_spec,
-        model: config.model,
+      });
+      fetchApiConfig(config.api_spec).then(config => {
+        this.setState({
+          model: config.model,
+        });
       });
     });
   }

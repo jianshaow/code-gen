@@ -59,13 +59,25 @@ def get_config():
 def update_config():
     conf = request.get_json()
     config.update_config(conf)
-    models.setStale()
     return "", 204
 
 
-@app.route("/api_specs", methods=["GET"])
+@app.route("/api_spec", methods=["GET"])
 def get_api_specs():
     return models.get_api_specs(), 200
+
+
+@app.route("/api_spec/<api_spec>", methods=["GET"])
+def get_api_config(api_spec):
+    return config.get_api_config(api_spec), 200
+
+
+@app.route("/api_spec/<api_spec>", methods=["PUT"])
+def update_api_config(api_spec):
+    conf = request.get_json()
+    config.update_api_config(api_spec, conf)
+    models.setStale(api_spec)
+    return "", 204
 
 
 @app.route("/models", methods=["GET"])

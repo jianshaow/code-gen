@@ -5,6 +5,8 @@ import {
   setBeBaseUrl,
   fetchConfig,
   updateConfig,
+  fetchApiConfig,
+  updateApiConfig,
   fetchApiSpecs,
   fetchModels,
   fetchTemplates,
@@ -48,10 +50,10 @@ class Setting extends Component<{}, SettingState> {
   }
 
   initSetting() {
-    this.initConfig();
-    this.initApiSpecs()
+    this.initApiSpecs();
     this.initModels();
     this.initTemplates();
+    this.initConfig();
   }
 
   handleSaveBeBaseUrl = async (e: MouseEvent) => {
@@ -97,11 +99,9 @@ class Setting extends Component<{}, SettingState> {
     fetchConfig().then(config => {
       this.setState({
         apiSpec: config.api_spec,
-        baseUrl: config.base_url,
-        apiKey: config.api_key,
-        model: config.model,
         tplDir: config.tpl_dir,
       });
+      this.reloadApiConfig(config.api_spec);
     });
   }
 
@@ -109,6 +109,17 @@ class Setting extends Component<{}, SettingState> {
     fetchTemplates(false).then(templates => {
       this.setState({ templates: templates, template: templates[0] });
     });
+  }
+
+  reloadApiConfig(apiSpec: string) {
+    fetchApiConfig(apiSpec).then((config) => {
+      console.log(config);
+      this.setState({
+        baseUrl: config.base_url || "",
+        apiKey: config.api_key || "",
+        model: config.model,
+      });
+    })
   }
 
   handelReloadTemplates = async (e: MouseEvent) => {
@@ -132,21 +143,34 @@ class Setting extends Component<{}, SettingState> {
   };
 
   handleSaveConfig = async (e: MouseEvent) => {
-    const { apiSpec, baseUrl, apiKey, model, tplDir } = this.state
+    const { apiSpec, tplDir } = this.state;
     const config = {
       'api_spec': apiSpec,
+      'tpl_dir': tplDir,
+    };
+    updateConfig(JSON.stringify(config)).then(() => {
+      alert('Setting Saved!');
+      this.initModels();
+      this.reloadApiConfig(apiSpec);
+    })
+  };
+
+  handleSaveApiConfig = async (e: MouseEvent) => {
+    const { apiSpec, baseUrl, apiKey, model } = this.state
+    const config = {
       'base_url': baseUrl,
       'api_key': apiKey,
       'model': model,
-      'tpl_dir': tplDir
     };
-    updateConfig(JSON.stringify(config)).then(() => {
-      alert('Setting Saved!')
+    updateApiConfig(apiSpec, JSON.stringify(config)).then(() => {
+      alert('API Config Saved!')
     })
   };
 
   render() {
-    const { beBaseUrl, apiSpecs, apiSpec, baseUrl, apiKey, models, model, tplDir, templates, template, content } = this.state;
+    const {
+      beBaseUrl, apiSpecs, apiSpec, baseUrl, apiKey, models, model, tplDir, templates, template, content
+    } = this.state;
 
     return (
       <div className='container-column'>
@@ -183,6 +207,26 @@ class Setting extends Component<{}, SettingState> {
           </div>
           <div className='setting'>
             <div>
+              <label className='config-lable'>Template Dir: </label>
+              <input
+                type='text'
+                value={tplDir}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  this.setState({ tplDir: e.target.value });
+                }}
+              />
+            </div>
+          </div>
+          <div className='setting'>
+            <div>
+              <button onClick={this.handleSaveConfig}>Save</button>
+            </div>
+          </div>
+        </div>
+        <label className='title'>API Config</label>
+        <div className='setting-container'>
+          <div className='setting'>
+            <div>
               <label className='config-lable'>API Base URL: </label>
               <input
                 type='text'
@@ -190,6 +234,7 @@ class Setting extends Component<{}, SettingState> {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   this.setState({ baseUrl: e.target.value });
                 }}
+                style={{ width: 240 }}
               />
             </div>
           </div>
@@ -202,6 +247,7 @@ class Setting extends Component<{}, SettingState> {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   this.setState({ apiKey: e.target.value });
                 }}
+                style={{ width: 280 }}
               />
             </div>
           </div>
@@ -219,19 +265,7 @@ class Setting extends Component<{}, SettingState> {
           </div>
           <div className='setting'>
             <div>
-              <label className='config-lable'>Template Dir: </label>
-              <input
-                type='text'
-                value={tplDir}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  this.setState({ tplDir: e.target.value });
-                }}
-              />
-            </div>
-          </div>
-          <div className='setting'>
-            <div>
-              <button onClick={this.handleSaveConfig}>Save Setting</button>
+              <button onClick={this.handleSaveApiConfig}>Save</button>
             </div>
           </div>
         </div>
