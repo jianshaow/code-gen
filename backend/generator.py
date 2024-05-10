@@ -70,17 +70,28 @@ _generators = {}
 def get_generator() -> CodeGenerator:
     api_spec = config.api_spec
     generator = _generators.get(api_spec)
-    if generator == None:
+    if generator is None:
         base_url = config.get_base_url()
         api_key = config.get_api_key()
         model = config.get_model()
-        if api_spec == "openai":
-            generator = OpenAIGenerator(base_url, api_key, model)
-        elif api_spec == "ollama":
-            generator = OLlamaGenerator(base_url, api_key, model)
-        elif api_spec == "google":
-            generator = GoogleGenerator(model)
+        generator = new_generator(api_spec, base_url, api_key, model)
         _generators[api_spec] = generator
+    return generator
+
+
+def new_generator(
+    api_spec: str, base_url: str, api_key: str, model: str
+) -> CodeGenerator:
+    if api_spec == "openai":
+        generator = OpenAIGenerator(base_url, api_key, model)
+    elif api_spec == "ollama":
+        generator = OLlamaGenerator(base_url, api_key, model)
+    elif api_spec == "google":
+        generator = GoogleGenerator(model)
+    else:
+        import extension as ext
+
+        generator = ext.new_generator(api_spec, base_url, api_key, model)
     return generator
 
 
@@ -98,13 +109,18 @@ def setStale(api_spec):
     _generators.pop(api_spec, None)
 
 
-def get_api_specs():
-    return models.get_api_specs()
+def get_api_specs() -> list[str]:
+    api_specs = models.get_api_specs()
+    import extension as ext
+
+    ext_api_specs = ext.get_api_specs()
+    return api_specs + ext_api_specs
 
 
 if __name__ == "__main__":
     import sys
 
+    print(get_api_specs())
     print(get_models())
     requirement = len(sys.argv) == 1 and sys.argv[0] or "code an example"
     generated = generate(prompts.get_tpl_names()[0], requirement)

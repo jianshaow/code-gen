@@ -6,7 +6,7 @@ import google.generativeai as genai
 import config
 
 
-def get_api_specs():
+def get_api_specs() -> list[str]:
     return ["ollama", "openai", "google"]
 
 

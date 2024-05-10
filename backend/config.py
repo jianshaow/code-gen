@@ -18,7 +18,7 @@ ollama_api_key = os.environ.get("OLLAMA_API_KEY", "EMPTY")
 ollama_model = os.environ.get("OLLAMA_MODEL", "llama3:8b")
 
 
-def get_config():
+def get_config() -> dict:
     return {
         "tpl_dir": tpl_dir,
         "api_spec": api_spec,
@@ -31,26 +31,29 @@ def update_config(conf: dict):
     tpl_dir = conf.get("tpl_dir", tpl_dir)
 
 
-def get_api_config(api_spec: str):
+def get_api_config(api_spec: str) -> dict:
     if api_spec == "openai":
         return {
             "base_url": openai_base_url,
             "api_key": openai_api_key,
             "model": openai_model,
         }
-    if api_spec == "google":
+    elif api_spec == "google":
         return {
             "base_url": None,
             "api_key": os.environ.get("GOOGLE_API_KEY"),
             "model": google_model,
         }
-    if api_spec == "ollama":
+    elif api_spec == "ollama":
         return {
             "base_url": ollama_base_url,
             "api_key": ollama_api_key,
             "model": ollama_model,
         }
-    return {}
+    else:
+        import extension as ext
+
+        return ext.get_api_config(api_spec)
 
 
 def update_api_config(api_spec: str, conf: dict):
@@ -61,13 +64,17 @@ def update_api_config(api_spec: str, conf: dict):
         openai_base_url = conf.get("base_url")
         openai_api_key = conf.get("api_key")
         openai_model = conf.get("model")
-    if api_spec == "google":
+    elif api_spec == "google":
         os.environ["GOOGLE_API_KEY"] = conf.get("api_key")
         google_model = conf.get("model")
-    if api_spec == "ollama":
+    elif api_spec == "ollama":
         ollama_base_url = conf.get("base_url")
         ollama_api_key = conf.get("api_key")
         ollama_model = conf.get("model")
+    else:
+        import extension as ext
+
+        ext.update_api_config(api_spec, conf)
 
 
 def get_api_key():
