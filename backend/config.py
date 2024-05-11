@@ -58,7 +58,7 @@ def get_api_config(api_spec: str) -> dict:
 
 def update_api_config(api_spec: str, conf: dict):
     global openai_base_url, openai_api_key, openai_model
-    global google_base_url, google_api_key, google_model
+    global google_model
     global ollama_base_url, ollama_api_key, ollama_model
     if api_spec == "openai":
         openai_base_url = conf.get("base_url")

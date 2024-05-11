@@ -19,7 +19,7 @@ def reload():
     scan_tpl_dir()
 
 
-def get_tpl_path(name):
+def get_tpl_path(name) -> str:
     if __tpl_path_dict is None:
         scan_tpl_dir()
     return __tpl_path_dict[name]
@@ -31,13 +31,13 @@ def get_tpl_names() -> dict:
     return list(__tpl_path_dict.keys())
 
 
-def get_prompt(tpl_name, requirement):
+def get_prompt(tpl_name: str, requirement: str) -> str:
     template = get_template(tpl_name)
     prompt = template.format(requirement=requirement)
     return prompt
 
 
-def get_template(tpl_name):
+def get_template(tpl_name: str):
     tpl_path = get_tpl_path(tpl_name)
     with open(tpl_path, "r") as file:
         content = file.read()

@@ -10,14 +10,14 @@ def get_api_specs() -> list[str]:
     return ["ollama", "openai", "google"]
 
 
-def openai_client(base_url, api_key):
+def openai_client(base_url: str, api_key: str):
     return OpenAI(
         base_url=base_url,
         api_key=api_key,
     )
 
 
-def openai_models(client: OpenAI):
+def openai_models(client: OpenAI) -> list[str]:
     return [obj.id for obj in client.models.list().data]
 
 
@@ -32,7 +32,7 @@ def google_model(model_name: str):
     return genai.GenerativeModel(model_name=model_name)
 
 
-def google_models():
+def google_models() -> list[str]:
     return [model.name for model in genai.list_models()]
 
 
@@ -40,7 +40,7 @@ def google_generate(model: genai.GenerativeModel, prompt: str):
     return model.generate_content(prompt).text
 
 
-def ollama_models(base_url: str):
+def ollama_models(base_url: str) -> list[str]:
     if base_url:
         url = "{base_url}/api/tags".format(base_url=base_url)
         response = requests.get(url)

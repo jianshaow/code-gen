@@ -13,7 +13,5 @@ def update_api_config(api_spec: str, conf: dict):
     raise NotImplementedError(f"API spec '{api_spec}' is not implemented")
 
 
-def new_generator(
-    api_spec: str, base_url: str, api_key: str, model: str
-) -> CodeGenerator:
+def new_generator(api_spec: str, model: str, **kwargs) -> CodeGenerator:
     raise NotImplementedError(f"API spec '{api_spec}' is not implemented")

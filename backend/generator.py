@@ -5,8 +5,9 @@ from urllib.parse import urlsplit
 
 class CodeGenerator:
 
-    def __init__(self, model_name: str) -> None:
+    def __init__(self, model_name: str, **kwargs) -> None:
         self.model_name = model_name
+        self.config = kwargs
         self._models = None
 
     def get_models(self, reload=False) -> list:
@@ -25,8 +26,10 @@ class CodeGenerator:
 
 class OpenAIGenerator(CodeGenerator):
 
-    def __init__(self, base_url: str, api_key: str, model_name: str) -> None:
-        super().__init__(model_name)
+    def __init__(self, model_name: str, **kwargs) -> None:
+        super().__init__(model_name, **kwargs)
+        base_url = self.config["base_url"]
+        api_key = self.config["api_key"]
         self._client = models.openai_client(base_url, api_key)
 
     def _get_models(self) -> list:
@@ -38,8 +41,8 @@ class OpenAIGenerator(CodeGenerator):
 
 class GoogleGenerator(CodeGenerator):
 
-    def __init__(self, model_name: str) -> None:
-        super().__init__(model_name)
+    def __init__(self, model_name: str, **kwargs) -> None:
+        super().__init__(model_name, **kwargs)
         self._model = models.google_model(model_name)
 
     def _get_models(self) -> list:
@@ -50,13 +53,14 @@ class GoogleGenerator(CodeGenerator):
 
 
 class OLlamaGenerator(CodeGenerator):
-    def __init__(self, base_url: str, api_key: str, model_name: str) -> None:
-        super().__init__(model_name)
-        self._base_url = base_url
+    def __init__(self, model_name: str, **kwargs) -> None:
+        super().__init__(model_name, **kwargs)
+        base_url = self.config["base_url"]
+        api_key = self.config["api_key"]
         self._client = models.openai_client(base_url, api_key)
 
     def _get_models(self) -> list:
-        parsed_url = urlsplit(self._base_url)
+        parsed_url = urlsplit(self.config["base_url"])
         ollama_base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
         return models.ollama_models(ollama_base_url)
 
@@ -74,28 +78,26 @@ def get_generator() -> CodeGenerator:
         base_url = config.get_base_url()
         api_key = config.get_api_key()
         model = config.get_model()
-        generator = new_generator(api_spec, base_url, api_key, model)
+        generator = new_generator(api_spec, model, base_url=base_url, api_key=api_key)
         _generators[api_spec] = generator
     return generator
 
 
-def new_generator(
-    api_spec: str, base_url: str, api_key: str, model: str
-) -> CodeGenerator:
+def new_generator(api_spec: str, model: str, **kwargs) -> CodeGenerator:
     if api_spec == "openai":
-        generator = OpenAIGenerator(base_url, api_key, model)
+        generator = OpenAIGenerator(model, **kwargs)
     elif api_spec == "ollama":
-        generator = OLlamaGenerator(base_url, api_key, model)
+        generator = OLlamaGenerator(model, **kwargs)
     elif api_spec == "google":
-        generator = GoogleGenerator(model)
+        generator = GoogleGenerator(model, **kwargs)
     else:
         import extension as ext
 
-        generator = ext.new_generator(api_spec, base_url, api_key, model)
+        generator = ext.new_generator(api_spec, model, **kwargs)
     return generator
 
 
-def generate(tpl_name, requirement):
+def generate(tpl_name: str, requirement: str):
     prompt = prompts.get_prompt(tpl_name, requirement)
     generator = get_generator()
     return generator.generate(prompt)
@@ -105,7 +107,7 @@ def get_models(reload=False):
     return get_generator().get_models(reload)
 
 
-def setStale(api_spec):
+def setStale(api_spec: str):
     _generators.pop(api_spec, None)
 
 
@@ -122,6 +124,8 @@ if __name__ == "__main__":
 
     print(get_api_specs())
     print(get_models())
-    requirement = len(sys.argv) == 1 and sys.argv[0] or "code an example"
+    print(config.get_config())
+    print(config.get_api_config(config.api_spec))
+    requirement = len(sys.argv) == 2 and sys.argv[1] or "code an example"
     generated = generate(prompts.get_tpl_names()[0], requirement)
     print(generated)
