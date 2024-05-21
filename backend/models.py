@@ -33,7 +33,11 @@ def google_model(model_name: str):
 
 
 def google_models() -> list[str]:
-    return [model.name for model in genai.list_models()]
+    return [
+        model.name
+        for model in genai.list_models()
+        if "generateContent" in model.supported_generation_methods
+    ]
 
 
 def google_generate(model: genai.GenerativeModel, prompt: str):
@@ -55,4 +59,5 @@ def ollama_models(base_url: str) -> list[str]:
 
 
 if __name__ == "__main__":
-    print(get_api_specs())
+    # print(get_api_specs())
+    print(google_models())
