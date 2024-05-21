@@ -36,7 +36,7 @@ class OpenAIGenerator(CodeGenerator):
         return models.openai_models(self._client)
 
     def generate(self, prompt: str) -> str:
-        return models.openai_generate(self._client, prompt)
+        return models.openai_generate(self._client, self.model_name, prompt)
 
 
 class GoogleGenerator(CodeGenerator):
@@ -53,6 +53,7 @@ class GoogleGenerator(CodeGenerator):
 
 
 class OLlamaGenerator(CodeGenerator):
+
     def __init__(self, model_name: str, **kwargs) -> None:
         super().__init__(model_name, **kwargs)
         base_url = self.config["base_url"]
@@ -65,7 +66,7 @@ class OLlamaGenerator(CodeGenerator):
         return models.ollama_models(ollama_base_url)
 
     def generate(self, prompt: str) -> str:
-        return models.openai_generate(self._client, prompt)
+        return models.openai_generate(self._client, self.model_name, prompt)
 
 
 _generators = {}

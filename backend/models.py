@@ -3,8 +3,6 @@ from urllib.error import HTTPError
 from openai import OpenAI
 import google.generativeai as genai
 
-import config
-
 
 def get_api_specs() -> list[str]:
     return ["ollama", "openai", "google"]
@@ -21,9 +19,9 @@ def openai_models(client: OpenAI) -> list[str]:
     return [obj.id for obj in client.models.list().data]
 
 
-def openai_generate(client: OpenAI, prompt: str):
+def openai_generate(client: OpenAI, model: str, prompt: str):
     completion = client.chat.completions.create(
-        model=config.get_model(), messages=[{"role": "user", "content": prompt}]
+        model=model, messages=[{"role": "user", "content": prompt}]
     )
     return completion.choices[0].message.content
 
@@ -59,5 +57,4 @@ def ollama_models(base_url: str) -> list[str]:
 
 
 if __name__ == "__main__":
-    # print(get_api_specs())
-    print(google_models())
+    print(get_api_specs())
