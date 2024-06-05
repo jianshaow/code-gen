@@ -62,8 +62,7 @@ class OLlamaGenerator(CodeGenerator):
 
     def _get_models(self) -> list:
         parsed_url = urlsplit(self.config["base_url"])
-        ollama_base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
-        return models.ollama_models(ollama_base_url)
+        return models.ollama_models(parsed_url.netloc)
 
     def generate(self, prompt: str) -> str:
         return models.openai_generate(self._client, self.model_name, prompt)

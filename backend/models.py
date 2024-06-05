@@ -1,5 +1,4 @@
-import requests
-from urllib.error import HTTPError
+import ollama
 from openai import OpenAI
 import google.generativeai as genai
 
@@ -42,17 +41,12 @@ def google_generate(model: genai.GenerativeModel, prompt: str):
     return model.generate_content(prompt).text
 
 
-def ollama_models(base_url: str) -> list[str]:
-    if base_url:
-        url = "{base_url}/api/tags".format(base_url=base_url)
-        response = requests.get(url)
-        if response.ok:
-            json_data = response.json()
-            return [obj["name"] for obj in json_data["models"]]
-        else:
-            raise HTTPError(
-                url=url, code=response.status_code, msg="call ollama api fail"
-            )
+def ollama_models(host: str) -> list[str]:
+    if host:
+        client = ollama.Client(host)
+        models = client.list()
+        return [obj["name"] for obj in models["models"]]
+
     return None
 
 
