@@ -7,6 +7,7 @@ services:
     environment:
       - https_proxy=${https_proxy}
       - PROMPT_TPL_DIR=/home/devel/prompts
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_API_BASE=${OPENAI_API_BASE}
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}

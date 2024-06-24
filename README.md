@@ -16,7 +16,7 @@ docker run -v $PWD/frontend:/home/node/frontend \
 
 ## buld docker
 ~~~shell
-export image_tag=0.0.5
+export image_tag=0.0.6
 docker build -t jianshao/codegen-demo:$image_tag .
 docker push jianshao/codegen-demo:$image_tag
 ~~~
