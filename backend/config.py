@@ -3,19 +3,15 @@ import os
 tpl_dir = os.environ.get("PROMPT_TPL_DIR", "prompts")
 api_spec = os.environ.get("API_SPEC", "ollama")
 
-openai_base_url = os.environ.get(
-    "OPENAI_API_BASE", "http://host.docker.internal:8000/v1"
-)
+openai_base_url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")
 openai_api_key = os.environ.get("OPENAI_API_KEY", "EMPTY")
 openai_model = os.environ.get("OPENAI_MODEL", "gpt-3.5-turbo")
 
 google_model = os.environ.get("GOOGLE_MODEL", "models/gemini-pro")
 
-ollama_base_url = os.environ.get(
-    "OLLAMA_API_BASE", "http://host.docker.internal:11434/v1"
-)
+ollama_base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
 ollama_api_key = os.environ.get("OLLAMA_API_KEY", "EMPTY")
-ollama_model = os.environ.get("OLLAMA_MODEL", "llama3:8b")
+ollama_model = os.environ.get("OLLAMA_MODEL", "deepseek-coder:6.7b")
 
 
 def get_config() -> dict:

@@ -2,7 +2,8 @@
 	"name": "CODEGEN-BE",
 	"image": "jianshao/codegen-dev:0.0.3",
 	"remoteEnv": {
-		"PYTHONPATH": "."
+		"PYTHONPATH": ".",
+		"OLLAMA_BASE_URL": "http://host.docker.internal:11434/v1"
 	},
 	"runArgs": [
 		"--add-host=host.docker.internal:host-gateway"
