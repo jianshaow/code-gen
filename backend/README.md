@@ -14,7 +14,7 @@ pip install -r requirements.txt
 
 ### Build
 ~~~ shell
-export image_tag=0.0.3
+export image_tag=0.0.4
 docker build -t jianshao/codegen-dev:$image_tag .
 docker push jianshao/codegen-dev:$image_tag
 ~~~
