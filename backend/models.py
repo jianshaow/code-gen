@@ -3,6 +3,8 @@ from openai import OpenAI
 import google.generativeai as genai
 
 
+genai.configure(transport="rest")
+
 def get_api_specs() -> list[str]:
     return ["ollama", "openai", "google"]
 
