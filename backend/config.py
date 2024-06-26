@@ -7,7 +7,7 @@ openai_base_url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")
 openai_api_key = os.environ.get("OPENAI_API_KEY", "EMPTY")
 openai_model = os.environ.get("OPENAI_MODEL", "gpt-3.5-turbo")
 
-google_model = os.environ.get("GOOGLE_MODEL", "models/gemini-pro")
+google_model = os.environ.get("GOOGLE_MODEL", "models/gemini-1.5-pro")
 
 ollama_base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
 ollama_api_key = os.environ.get("OLLAMA_API_KEY", "EMPTY")
