@@ -123,9 +123,13 @@ if __name__ == "__main__":
     import sys
 
     print(get_api_specs())
-    print(get_models())
+    print("-" * 80)
     print(config.get_config())
+    print("-" * 80)
+    print(get_models())
+    print("-"  * 80)
     print(config.get_api_config(config.api_spec))
+    print("-" * 80)
     requirement = len(sys.argv) == 2 and sys.argv[1] or "code an example"
     generated = generate(prompts.get_tpl_names()[0], requirement)
     print(generated)
