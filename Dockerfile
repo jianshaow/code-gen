@@ -1,4 +1,10 @@
-FROM jianshao/flask-base:3
+ARG BASE_IMAGE=jianshao/llm-api-base
+ARG TAG=latest
+
+FROM ${BASE_IMAGE}:${TAG}
+
+ARG VERSION=snapshot
+LABEL version=${VERSION}
 
 COPY --chown=devel:devel requirements.txt ./
 COPY --chown=devel:devel backend/*.py ./backend/
