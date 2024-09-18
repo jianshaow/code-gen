@@ -8,7 +8,7 @@ echo "Using llm api base version ${tag}"
 
 image=jianshao/codegen-demo
 version=$(date +%Y%m%d)
-docker build -t ${image}:latest . --build-arg TAG=${tag} --build-arg VERSION=${version}
+docker build -t ${image}:latest . --build-arg TAG=${tag} --build-arg VERSION=${version} $*
 
 docker tag ${image}:latest ${image}:${version}
 docker push ${image}:latest
