@@ -1,6 +1,9 @@
-import prompts, config, models
 from abc import abstractmethod
 from urllib.parse import urlsplit
+
+import config
+import models
+import prompts
 
 
 class CodeGenerator:
@@ -20,7 +23,7 @@ class CodeGenerator:
         pass
 
     @abstractmethod
-    def generate(prompt: str) -> str:
+    def generate(self, prompt: str) -> str:
         pass
 
 
@@ -43,29 +46,27 @@ class GoogleGenerator(CodeGenerator):
 
     def __init__(self, model_name: str, **kwargs) -> None:
         super().__init__(model_name, **kwargs)
-        self._model = models.google_model(model_name)
+        self._client = models.google_client()
 
     def _get_models(self) -> list:
-        return models.google_models()
+        return models.google_models(self._client)
 
     def generate(self, prompt: str) -> str:
-        return models.google_generate(self._model, prompt)
+        return models.google_generate(self._client, self.model_name, prompt)
 
 
-class OLlamaGenerator(CodeGenerator):
+class OllamaGenerator(CodeGenerator):
 
     def __init__(self, model_name: str, **kwargs) -> None:
         super().__init__(model_name, **kwargs)
         base_url = self.config["base_url"]
-        api_key = self.config["api_key"]
-        self._client = models.openai_client(base_url, api_key)
+        self._client = models.ollama_client(base_url)
 
     def _get_models(self) -> list:
-        parsed_url = urlsplit(self.config["base_url"])
-        return models.ollama_models(parsed_url.netloc)
+        return models.ollama_models(self._client)
 
     def generate(self, prompt: str) -> str:
-        return models.openai_generate(self._client, self.model_name, prompt)
+        return models.ollama_generate(self._client, self.model_name, prompt)
 
 
 _generators = {}
@@ -87,7 +88,7 @@ def new_generator(api_spec: str, model: str, **kwargs) -> CodeGenerator:
     if api_spec == "openai":
         generator = OpenAIGenerator(model, **kwargs)
     elif api_spec == "ollama":
-        generator = OLlamaGenerator(model, **kwargs)
+        generator = OllamaGenerator(model, **kwargs)
     elif api_spec == "google":
         generator = GoogleGenerator(model, **kwargs)
     else:
@@ -127,7 +128,7 @@ if __name__ == "__main__":
     print(config.get_config())
     print("-" * 80)
     print(get_models())
-    print("-"  * 80)
+    print("-" * 80)
     print(config.get_api_config(config.api_spec))
     print("-" * 80)
     requirement = len(sys.argv) == 2 and sys.argv[1] or "code an example"

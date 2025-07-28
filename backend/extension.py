@@ -5,11 +5,11 @@ def get_api_specs() -> list[str]:
     return []
 
 
-def get_api_config(api_spec: str) -> dict:
+def get_api_config(api_spec: str) -> dict[str, str]:
     raise NotImplementedError(f"API spec '{api_spec}' is not implemented")
 
 
-def update_api_config(api_spec: str, conf: dict):
+def update_api_config(api_spec: str, conf: dict[str, str]):
     raise NotImplementedError(f"API spec '{api_spec}' is not implemented")
 
 

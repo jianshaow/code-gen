@@ -1,4 +1,4 @@
 flask
 ollama
 openai
-google-generativeai
+google-genai
