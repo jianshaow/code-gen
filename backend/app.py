@@ -1,90 +1,98 @@
 import os
-from flask import Flask, request, send_from_directory
 
-import config, prompts, generator
+import uvicorn
+from fastapi import FastAPI, Request, status
+from fastapi.responses import FileResponse, PlainTextResponse
+from fastapi.staticfiles import StaticFiles
+
+import config
+import generator
+import prompts
 
 frontend = os.path.abspath(os.path.join("../frontend", "build"))
-frontend = os.environ.get("FRONTEND_DIR", frontend)
+frontend = os.getenv("FRONTEND_DIR", frontend)
 static_folder = os.path.join(frontend, "static")
 
-app = Flask(__name__, static_folder=static_folder)
+app = FastAPI()
 
 
-@app.route("/", defaults={"path": ""})
-@app.route("/<path>")
-def main(path):
-    if path == "" or path == "setting":
-        return send_from_directory(frontend, "index.html")
-    else:
-        return send_from_directory(frontend, path)
-
-
-@app.route("/<tpl_name>/generate", methods=["POST"])
-def generate(tpl_name):
-    raw_data = request.get_data()
+@app.post("/{tpl_name}/generate")
+async def generate(tpl_name, request: Request):
+    raw_data = await request.body()
     requirement = raw_data.decode("utf-8")
-    return generator.generate(tpl_name, requirement), 200
+    return PlainTextResponse(generator.generate(tpl_name, requirement))
 
 
-@app.route("/template", methods=["GET"])
-def get_templates():
-    reload = request.args.get("reload", "false")
+@app.get("/template")
+def get_templates(request: Request):
+    reload = request.get("reload", "false")
     if reload == "true":
         prompts.reload()
-    return prompts.get_tpl_names(), 200
+    return prompts.get_tpl_names()
 
 
-@app.route("/template/<tpl_name>", methods=["GET"])
+@app.get("/template/{tpl_name}")
 def get_template(tpl_name):
-    return prompts.get_template(tpl_name)
+    return PlainTextResponse(prompts.get_template(tpl_name))
 
 
-@app.route("/template/<tpl_name>", methods=["PUT"])
-def update_template(tpl_name):
-    raw_data = request.get_data()
+@app.put("/template/{tpl_name}", status_code=status.HTTP_204_NO_CONTENT)
+async def update_template(tpl_name, request: Request):
+    raw_data = await request.body()
     content = raw_data.decode("utf-8")
     prompts.save_template(
         tpl_name,
         content,
     )
-    return "", 204
 
 
-@app.route("/config", methods=["GET"])
+@app.get("/config")
 def get_config():
-    return config.get_config(), 200
+    return config.get_config()
 
 
-@app.route("/config", methods=["PUT"])
-def update_config():
-    conf = request.get_json()
+@app.put("/config", status_code=status.HTTP_204_NO_CONTENT)
+async def update_config(request: Request):
+    conf = await request.json()
     config.update_config(conf)
-    return "", 204
 
 
-@app.route("/api_spec", methods=["GET"])
+@app.get("/api_spec")
 def get_api_specs():
-    return generator.get_api_specs(), 200
+    return generator.get_api_specs()
 
 
-@app.route("/api_spec/<api_spec>", methods=["GET"])
+@app.get("/api_spec/{api_spec}")
 def get_api_config(api_spec):
-    return config.get_api_config(api_spec), 200
+    return config.get_api_config(api_spec)
 
 
-@app.route("/api_spec/<api_spec>", methods=["PUT"])
-def update_api_config(api_spec):
-    conf = request.get_json()
+@app.put("/api_spec/{api_spec}", status_code=status.HTTP_204_NO_CONTENT)
+async def update_api_config(api_spec, request: Request):
+    conf = await request.json()
     config.update_api_config(api_spec, conf)
     generator.setStale(api_spec)
-    return "", 204
 
 
-@app.route("/models", methods=["GET"])
-def get_models():
-    reload = request.args.get("reload", "false")
-    return generator.get_models(reload == "true"), 200
+@app.get("/models")
+def get_models(request: Request):
+    reload = request.get("reload", "false")
+    return generator.get_models(reload == "true")
 
+
+class FrontendStaticFiles(StaticFiles):
+    async def get_response(self, path: str, scope):
+        if path == "setting":
+            file_path = os.path.join(frontend, "index.html")
+            return FileResponse(file_path)
+
+        return await super().get_response(path, scope)
+
+
+app.mount("/", FrontendStaticFiles(directory=frontend, html=True), name="frontend")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    app_host = os.getenv("APP_HOST", "0.0.0.0")
+    app_port = int(os.getenv("APP_PORT", "8000"))
+
+    uvicorn.run(app="app:app", host=app_host, port=app_port, reload=True)
