@@ -39,14 +39,14 @@ def get_prompt(tpl_name: str, requirement: str) -> str:
 
 def get_template(tpl_name: str):
     tpl_path = get_tpl_path(tpl_name)
-    with open(tpl_path, "r") as file:
+    with open(tpl_path, "r", encoding="utf-8") as file:
         content = file.read()
         return content
 
 
 def save_template(tpl_name, content):
     tpl_path = get_tpl_path(tpl_name)
-    with open(tpl_path, "w") as file:
+    with open(tpl_path, "w", encoding="utf-8") as file:
         file.write(content)
 
 
