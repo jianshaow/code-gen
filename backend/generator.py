@@ -1,5 +1,4 @@
 from abc import abstractmethod
-from urllib.parse import urlsplit
 
 import config
 import models
@@ -120,7 +119,7 @@ def get_api_specs() -> list[str]:
     return api_specs + ext_api_specs
 
 
-if __name__ == "__main__":
+def __main():
     import sys
 
     print(get_api_specs())
@@ -134,3 +133,7 @@ if __name__ == "__main__":
     requirement = len(sys.argv) == 2 and sys.argv[1] or "code an example"
     generated = generate(prompts.get_tpl_names()[0], requirement)
     print(generated)
+
+
+if __name__ == "__main__":
+    __main()
