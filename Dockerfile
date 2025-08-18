@@ -7,7 +7,7 @@ ARG VERSION=snapshot
 LABEL version=${VERSION}
 
 RUN pip install --no-cache-dir --upgrade pip && \
-pip install --no-cache-dir flask
+pip install --no-cache-dir fastapi uvicorn
 
 COPY --chown=devel:devel backend/*.py ./backend/
 COPY --chown=devel:devel frontend/build ./frontend
@@ -15,4 +15,4 @@ COPY --chown=devel:devel frontend/build ./frontend
 ENV PYTHONPATH=${HOME}/backend
 ENV FRONTEND_DIR=${HOME}/frontend
 
-CMD [ "python", "-m", "app" ]
+CMD [ "uvicorn", "app:app", "--host", "0.0.0.0"]
