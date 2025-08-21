@@ -15,6 +15,6 @@ services:
       - ${PROMPT_TPL_DIR}:/home/devel/prompts
       - ${HOME}/.config:/home/devel/.config
     ports:
-      - 5000:5000
+      - 8000:8000
     extra_hosts:
       - host.docker.internal:host-gateway
