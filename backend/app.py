@@ -24,9 +24,8 @@ async def generate(tpl_name, request: Request):
 
 
 @app.get("/template")
-def get_templates(request: Request):
-    reload = request.get("reload", "false")
-    if reload == "true":
+def get_templates(reload: bool = False):
+    if reload:
         prompts.reload()
     return prompts.get_tpl_names()
 
