@@ -70,7 +70,7 @@ async function updateTemplate(template: string, content: string) {
 }
 
 async function generate(template: string, requirement: string) {
-  const url = `${getBeBaseUrl()}/${template}/generate`
+  const url = `${getBeBaseUrl()}/${template}/generate`;
   return fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'plain/text' },
@@ -78,17 +78,33 @@ async function generate(template: string, requirement: string) {
   }).then(response => response.text());
 }
 
-export {
-  getBeBaseUrl,
-  setBeBaseUrl,
-  fetchConfig,
-  updateConfig,
-  fetchApiConfig,
-  updateApiConfig,
-  fetchApiSpecs,
-  fetchModels,
-  fetchTemplates,
-  fetchTemplate,
-  updateTemplate,
-  generate
+async function gen_stream(template: string, requirement: string, onTextProcess: (generated: string) => void) {
+  const url = `${getBeBaseUrl()}/${template}/gen_stream`;
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'plain/text' },
+    body: requirement,
+  });
+
+  const reader = resp.body?.getReader();
+  if (!reader) {
+    return;
+  }
+
+  const decoder = new TextDecoder();
+  let accumulatedText = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    const chunk = decoder.decode(value, { stream: true });
+    accumulatedText += chunk;
+    onTextProcess(accumulatedText);
+  }
 }
+
+export {
+  fetchApiConfig, fetchApiSpecs, fetchConfig, fetchModels, fetchTemplate, fetchTemplates, gen_stream, generate, getBeBaseUrl,
+  setBeBaseUrl, updateApiConfig, updateConfig, updateTemplate
+};

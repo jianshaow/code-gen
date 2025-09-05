@@ -2,7 +2,7 @@ import os
 
 import uvicorn
 from fastapi import FastAPI, Request, status
-from fastapi.responses import FileResponse, PlainTextResponse
+from fastapi.responses import FileResponse, PlainTextResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 import config
@@ -21,6 +21,13 @@ async def generate(tpl_name, request: Request):
     raw_data = await request.body()
     requirement = raw_data.decode("utf-8")
     return PlainTextResponse(generators.generate(tpl_name, requirement))
+
+
+@app.post("/{tpl_name}/gen_stream")
+async def gen_stream(tpl_name, request: Request):
+    raw_data = await request.body()
+    requirement = raw_data.decode("utf-8")
+    return StreamingResponse(generators.gen_stream(tpl_name, requirement))
 
 
 @app.get("/template")

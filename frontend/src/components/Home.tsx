@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
-import { fetchConfig, fetchApiConfig, fetchTemplates, generate } from '../services/backend'
+import { fetchConfig, fetchApiConfig, fetchTemplates, generate, gen_stream } from '../services/backend'
 import 'highlight.js/styles/github.css';
 import './Common.css';
 import './Home.css';
@@ -62,6 +62,18 @@ class Home extends Component<{}, HomeState> {
     });
   };
 
+  handleGenerateStream = async (e: MouseEvent) => {
+    const { template, requirement } = this.state;
+    this.setState({ highlighted: '' })
+
+    gen_stream(template, requirement, (generated: string) => {
+      this.getHighlightedMarkdown(generated).then((highlighted) => {
+        this.setState({ generated: generated });
+        this.setState({ highlighted: highlighted });
+      });
+    });
+  };
+
   async getHighlightedMarkdown(mdContent: string) {
     const marked = new Marked(
       markedHighlight({
@@ -106,7 +118,7 @@ class Home extends Component<{}, HomeState> {
               }} />
           </div>
           <div className='container-column'>
-            <button onClick={this.handleGenerate}>=&gt;</button>
+            <button onClick={this.handleGenerateStream}>=&gt;</button>
           </div>
           <div className='generated-block'>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
