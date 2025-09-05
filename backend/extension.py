@@ -1,4 +1,4 @@
-from generator import CodeGenerator
+from generators import CodeGenerator
 
 
 def get_api_specs() -> list[str]:

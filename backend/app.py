@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
 import config
-import generator
+import generators
 import prompts
 
 frontend = os.path.abspath(os.path.join("../frontend", "build"))
@@ -20,7 +20,7 @@ app = FastAPI()
 async def generate(tpl_name, request: Request):
     raw_data = await request.body()
     requirement = raw_data.decode("utf-8")
-    return PlainTextResponse(generator.generate(tpl_name, requirement))
+    return PlainTextResponse(generators.generate(tpl_name, requirement))
 
 
 @app.get("/template")
@@ -58,7 +58,7 @@ async def update_config(request: Request):
 
 @app.get("/api_spec")
 def get_api_specs():
-    return generator.get_api_specs()
+    return generators.get_api_specs()
 
 
 @app.get("/api_spec/{api_spec}")
@@ -70,13 +70,13 @@ def get_api_config(api_spec):
 async def update_api_config(api_spec, request: Request):
     conf = await request.json()
     config.update_api_config(api_spec, conf)
-    generator.setStale(api_spec)
+    generators.setStale(api_spec)
 
 
 @app.get("/models")
 def get_models(request: Request):
     reload = request.get("reload", "false")
-    return generator.get_models(reload == "true")
+    return generators.get_models(reload == "true")
 
 
 class FrontendStaticFiles(StaticFiles):

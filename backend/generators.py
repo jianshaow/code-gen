@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from typing import Generator
 
 import config
 import models
@@ -25,6 +26,10 @@ class CodeGenerator:
     def generate(self, prompt: str) -> str:
         pass
 
+    @abstractmethod
+    def gen_stream(self, prompt: str) -> Generator:
+        pass
+
 
 class OpenAIGenerator(CodeGenerator):
 
@@ -38,7 +43,10 @@ class OpenAIGenerator(CodeGenerator):
         return models.openai_models(self._client)
 
     def generate(self, prompt: str) -> str:
-        return models.openai_generate(self._client, self.model_name, prompt)
+        return models.openai_generate(self._client, self.model_name, prompt) or ""
+
+    def gen_stream(self, prompt: str):
+        return models.openai_gen_stream(self._client, self.model_name, prompt)
 
 
 class GoogleGenerator(CodeGenerator):
@@ -53,6 +61,9 @@ class GoogleGenerator(CodeGenerator):
     def generate(self, prompt: str) -> str:
         return models.google_generate(self._client, self.model_name, prompt)
 
+    def gen_stream(self, prompt: str):
+        return models.google_gen_stream(self._client, self.model_name, prompt)
+
 
 class OllamaGenerator(CodeGenerator):
 
@@ -66,6 +77,9 @@ class OllamaGenerator(CodeGenerator):
 
     def generate(self, prompt: str) -> str:
         return models.ollama_generate(self._client, self.model_name, prompt)
+
+    def gen_stream(self, prompt: str) -> str:
+        return models.ollama_gen_stream(self._client, self.model_name, prompt)
 
 
 _generators = {}
@@ -103,6 +117,12 @@ def generate(tpl_name: str, requirement: str):
     return generator.generate(prompt)
 
 
+def gen_stream(tpl_name: str, requirement: str):
+    prompt = prompts.get_prompt(tpl_name, requirement)
+    generator = get_generator()
+    return generator.gen_stream(prompt)
+
+
 def get_models(reload=False):
     return get_generator().get_models(reload)
 
@@ -126,13 +146,15 @@ def __main():
     print("-" * 80)
     print(config.get_config())
     print("-" * 80)
-    print(get_models())
+    for model in get_models():
+        print(model)
     print("-" * 80)
     print(config.get_api_config(config.api_spec))
     print("-" * 80)
     requirement = len(sys.argv) == 2 and sys.argv[1] or "code an example"
-    generated = generate(prompts.get_tpl_names()[0], requirement)
-    print(generated)
+    response = gen_stream(prompts.get_tpl_names()[0], requirement)
+    for chunk in response:
+        print(chunk, end="")
 
 
 if __name__ == "__main__":

@@ -87,7 +87,7 @@ def get_base_url():
 
 
 def get_model():
-    return get_api_config(api_spec).get("model")
+    return get_api_config(api_spec).get("model", "")
 
 
 if __name__ == "__main__":
