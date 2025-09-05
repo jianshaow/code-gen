@@ -79,7 +79,7 @@ class Home extends Component<{}, HomeState> {
     const { apiSpec, model, templates, template, requirement, generated, highlighted, copied } = this.state;
 
     return (
-      <div className='container-column'>
+      <div className='main-frame'>
         <div className='header'>
           <Link to='/setting'>Setting</Link>
         </div>

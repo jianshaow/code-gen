@@ -173,23 +173,26 @@ class Setting extends Component<{}, SettingState> {
     } = this.state;
 
     return (
-      <div className='container-column'>
+      <div className='main-frame'>
         <div className='header'>
           <Link to='/'>Return Home</Link>
         </div>
         <h1 className='title'>Settings</h1>
-        <div className='setting'>
-          <div>
-            <label className='config-lable'>Backend Base URL: </label>
-            <input
-              type='text'
-              value={beBaseUrl}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                this.setState({ beBaseUrl: e.target.value });
-              }}
-            />
-            <button onClick={this.handleSaveBeBaseUrl}>Save</button>
-            <button onClick={this.handleDetectBeBaseUrl}>Detect</button>
+        <label className='title'>General</label>
+        <div className='setting-container'>
+          <div className='setting'>
+            <div>
+              <label className='config-lable'>Backend Base URL: </label>
+              <input
+                type='text'
+                value={beBaseUrl}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  this.setState({ beBaseUrl: e.target.value });
+                }}
+              />
+              <button onClick={this.handleSaveBeBaseUrl}>Save</button>
+              <button onClick={this.handleDetectBeBaseUrl}>Detect</button>
+            </div>
           </div>
         </div>
         <label className='title'>Backend</label>
@@ -270,7 +273,7 @@ class Setting extends Component<{}, SettingState> {
           </div>
         </div>
         <label className='title'>Template</label>
-        <div className='setting'>
+        <div className='setting-container'>
           <div>
             <button onClick={this.handelReloadTemplates}>Reload</button>
             <label className='config-lable'>Template: </label>

@@ -1,10 +1,18 @@
+.main-frame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: top;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .header {
   text-align: right;
-  margin: 0 20px;
 }
 
 .title {
-  margin: 10px 20px;
   text-align: left;
 }
 
@@ -14,7 +22,6 @@
 
 .container {
   display: flex;
-  margin: 0 20px;
 }
 
 .container-column {
@@ -22,13 +29,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: top;
-  margin: 10px 0;
 }
 
 .center {
   text-align: center;
   align-items: center;
-  margin: 0 10px;
 }
 
 .success {
@@ -36,9 +41,18 @@
   color: green;
 }
 
-.divider {
+#root {
+  margin: 20px 20px;
+  padding: 0;
   width: 100%;
-  height: 1px;
-  background-color: #000;
-  margin: 10px 0;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #f0f0f0;
 }
