@@ -71,9 +71,10 @@ def ollama_generate(client: OllamaClient, model: str, prompt: str):
 
 
 def ollama_gen_stream(client: OllamaClient, model: str, prompt: str):
-    response = client.generate(
-        model=model, prompt=prompt, think=False, stream=True
-    )
+    response = client.generate(model=model, prompt=prompt, think=False, stream=True)
+    for chunk in response:
+        yield chunk.response
+
 
 if __name__ == "__main__":
     print(get_api_specs())
