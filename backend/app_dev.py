@@ -5,11 +5,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app import app
 
-frontend_base_url = os.getenv("FRONTEND_BASE_URL", "http://localhost:8000")
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[frontend_base_url],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
