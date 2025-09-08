@@ -2,6 +2,7 @@ services:
   codegen:
     image: jianshao/code-gen-demo:${image_ver}
     container_name: codegen
+    pull_policy: always
     restart: unless-stopped
     environment:
       - https_proxy=${https_proxy}
