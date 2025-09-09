@@ -1,10 +1,10 @@
-import { Component, ChangeEvent, MouseEvent } from 'react';
-import { Link } from 'react-router-dom';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
-import hljs from 'highlight.js';
-import { fetchConfig, fetchApiConfig, fetchTemplates, generate, gen_stream } from '../services/backend'
-import 'highlight.js/styles/github.css';
+import React, { ChangeEvent, Component, MouseEvent } from 'react';
+import { Link } from 'react-router-dom';
+import { fetchApiConfig, fetchConfig, fetchTemplates, gen_stream, generate } from '../services/backend';
 import './Common.css';
 import './Home.css';
 
@@ -27,6 +27,11 @@ class Home extends Component<{}, HomeState> {
       requirement: 'make an example', generated: '',
       highlighted: '', copied: false,
     };
+  }
+
+  textDivRef = React.createRef<HTMLDivElement>();
+
+  componentDidMount() {
     this.initConfig();
     this.initTemplate();
   }
@@ -52,7 +57,7 @@ class Home extends Component<{}, HomeState> {
 
   handleGenerate = async (e: MouseEvent) => {
     const { template, requirement } = this.state;
-    this.setState({ highlighted: '' })
+    this.setState({ highlighted: '' });
 
     generate(template, requirement).then(generated => {
       this.getHighlightedMarkdown(generated).then((highlighted) => {
@@ -70,6 +75,11 @@ class Home extends Component<{}, HomeState> {
       this.getHighlightedMarkdown(generated).then((highlighted) => {
         this.setState({ generated: generated });
         this.setState({ highlighted: highlighted });
+        if (this.textDivRef.current) {
+          console.log('scrollHeight:', this.textDivRef.current.scrollHeight);
+          this.textDivRef.current.scrollTop = this.textDivRef.current.scrollHeight;
+          console.log('scrollTop:', this.textDivRef.current.scrollTop);
+        }
       });
     });
   };
@@ -134,9 +144,7 @@ class Home extends Component<{}, HomeState> {
                 }} style={{ 'textAlign': 'right' }}>Copy</button>
               </div>
             </div>
-            <div className='markdown-container'>
-              <div className='markdown-content' dangerouslySetInnerHTML={{ __html: highlighted }} />
-            </div>
+            <div ref={this.textDivRef} className='markdown-content' dangerouslySetInnerHTML={{ __html: highlighted }} />
           </div>
         </div>
       </div>

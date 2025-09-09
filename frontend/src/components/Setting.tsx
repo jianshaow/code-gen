@@ -1,18 +1,18 @@
-import { Component, ChangeEvent, MouseEvent } from 'react';
+import { ChangeEvent, Component, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
+  fetchApiConfig,
+  fetchApiSpecs,
+  fetchConfig,
+  fetchModels,
+  fetchTemplate,
+  fetchTemplates,
   getBeBaseUrl,
   setBeBaseUrl,
-  fetchConfig,
-  updateConfig,
-  fetchApiConfig,
   updateApiConfig,
-  fetchApiSpecs,
-  fetchModels,
-  fetchTemplates,
-  fetchTemplate,
+  updateConfig,
   updateTemplate
-} from '../services/backend'
+} from '../services/backend';
 import './Common.css';
 import './Setting.css';
 
@@ -46,6 +46,9 @@ class Setting extends Component<{}, SettingState> {
       template: '',
       content: '',
     };
+  }
+
+  componentDidMount() {
     this.initSetting();
   }
 
@@ -163,7 +166,7 @@ class Setting extends Component<{}, SettingState> {
       'model': model,
     };
     updateApiConfig(apiSpec, JSON.stringify(config)).then(() => {
-      alert('API Config Saved!')
+      alert('API Config Saved!');
     })
   };
 

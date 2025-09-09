@@ -12,12 +12,9 @@
     margin-top: 10px;
 }
 
-.markdown-container {
-    height: 460px;
+.markdown-content {
+    height: 440px;
     overflow: auto;
     border: 1px solid #000;
-}
-
-.markdown-content {
     padding: 5px;
 }
