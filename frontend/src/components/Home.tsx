@@ -76,9 +76,7 @@ class Home extends Component<{}, HomeState> {
         this.setState({ generated: generated });
         this.setState({ highlighted: highlighted });
         if (this.codeRef.current) {
-          console.log('scrollHeight:', this.codeRef.current.scrollHeight);
           this.codeRef.current.scrollTop = this.codeRef.current.scrollHeight;
-          console.log('scrollTop:', this.codeRef.current.scrollTop);
         }
       });
     });
