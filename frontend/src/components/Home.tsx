@@ -29,7 +29,7 @@ class Home extends Component<{}, HomeState> {
     };
   }
 
-  textDivRef = React.createRef<HTMLDivElement>();
+  codeRef = React.createRef<HTMLDivElement>();
 
   componentDidMount() {
     this.initConfig();
@@ -75,10 +75,10 @@ class Home extends Component<{}, HomeState> {
       this.getHighlightedMarkdown(generated).then((highlighted) => {
         this.setState({ generated: generated });
         this.setState({ highlighted: highlighted });
-        if (this.textDivRef.current) {
-          console.log('scrollHeight:', this.textDivRef.current.scrollHeight);
-          this.textDivRef.current.scrollTop = this.textDivRef.current.scrollHeight;
-          console.log('scrollTop:', this.textDivRef.current.scrollTop);
+        if (this.codeRef.current) {
+          console.log('scrollHeight:', this.codeRef.current.scrollHeight);
+          this.codeRef.current.scrollTop = this.codeRef.current.scrollHeight;
+          console.log('scrollTop:', this.codeRef.current.scrollTop);
         }
       });
     });
@@ -144,7 +144,7 @@ class Home extends Component<{}, HomeState> {
                 }} style={{ 'textAlign': 'right' }}>Copy</button>
               </div>
             </div>
-            <div ref={this.textDivRef} className='markdown-content' dangerouslySetInnerHTML={{ __html: highlighted }} />
+            <div ref={this.codeRef} className='markdown-content' dangerouslySetInnerHTML={{ __html: highlighted }} />
           </div>
         </div>
       </div>
