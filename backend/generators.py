@@ -1,9 +1,9 @@
 from abc import abstractmethod
 from typing import Generator
 
-import config
 import models
 import prompts
+from config import __app_config, get_api_config
 
 
 class CodeGenerator:
@@ -78,7 +78,7 @@ class OllamaGenerator(CodeGenerator):
     def generate(self, prompt: str) -> str:
         return models.ollama_generate(self._client, self.model_name, prompt)
 
-    def gen_stream(self, prompt: str) -> str:
+    def gen_stream(self, prompt: str) -> Generator:
         return models.ollama_gen_stream(self._client, self.model_name, prompt)
 
 
@@ -86,13 +86,16 @@ _generators = {}
 
 
 def get_generator() -> CodeGenerator:
-    api_spec = config.api_spec
+    api_spec = __app_config.api_spec
+    api_config = get_api_config(api_spec)
     generator = _generators.get(api_spec)
     if generator is None:
-        base_url = config.get_base_url()
-        api_key = config.get_api_key()
-        model = config.get_model()
-        generator = new_generator(api_spec, model, base_url=base_url, api_key=api_key)
+        generator = new_generator(
+            api_spec,
+            api_config.model,
+            base_url=api_config.base_url,
+            api_key=api_config.api_key,
+        )
         _generators[api_spec] = generator
     return generator
 
@@ -144,12 +147,12 @@ def __main():
 
     print(get_api_specs())
     print("-" * 80)
-    print(config.get_config())
+    print(__app_config)
     print("-" * 80)
     for model in get_models():
         print(model)
     print("-" * 80)
-    print(config.get_api_config(config.api_spec))
+    print(get_api_config(__app_config.api_spec))
     print("-" * 80)
     requirement = len(sys.argv) == 2 and sys.argv[1] or "code an example"
     response = gen_stream(prompts.get_tpl_names()[0], requirement)

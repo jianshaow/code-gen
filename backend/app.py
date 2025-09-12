@@ -54,13 +54,12 @@ async def update_template(tpl_name, request: Request):
 
 @app.get("/config")
 def get_config():
-    return config.get_config()
+    return config.get_app_config()
 
 
 @app.put("/config", status_code=status.HTTP_204_NO_CONTENT)
-async def update_config(request: Request):
-    conf = await request.json()
-    config.update_config(conf)
+async def update_config(app_config: config.AppConfig):
+    config.update_app_config(app_config)
 
 
 @app.get("/api_spec")
@@ -74,9 +73,8 @@ def get_api_config(api_spec):
 
 
 @app.put("/api_spec/{api_spec}", status_code=status.HTTP_204_NO_CONTENT)
-async def update_api_config(api_spec, request: Request):
-    conf = await request.json()
-    config.update_api_config(api_spec, conf)
+async def update_api_config(api_spec, api_config: config.APIConfig):
+    config.update_api_config(api_spec, api_config)
     generators.setStale(api_spec)
 
 

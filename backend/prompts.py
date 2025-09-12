@@ -1,34 +1,41 @@
-import os, config
+import os
 
-__tpl_path_dict: dict = None
+from pydantic import BaseModel
+
+from config import get_app_config
+
+
+class Templates(BaseModel):
+    scanned: bool = False
+    tpl_paths: dict = {}
+
+
+__templates = Templates()
 
 
 def scan_tpl_dir():
-    global __tpl_path_dict
-    __tpl_path_dict = {}
-    root_dir = config.tpl_dir
+    root_dir = get_app_config().tpl_dir
     for entry in os.listdir(root_dir):
         path = os.path.join(root_dir, entry)
         tpl_name, _ = os.path.splitext(entry)
-        __tpl_path_dict[tpl_name] = path
+        __templates.tpl_paths[tpl_name] = path
 
 
 def reload():
-    global __tpl_path_dict
-    __tpl_path_dict = None
+    __templates.scanned = False
     scan_tpl_dir()
 
 
 def get_tpl_path(name) -> str:
-    if __tpl_path_dict is None:
+    if not __templates.scanned:
         scan_tpl_dir()
-    return __tpl_path_dict[name]
+    return __templates.tpl_paths[name]
 
 
-def get_tpl_names() -> dict:
-    if __tpl_path_dict is None:
+def get_tpl_names() -> list:
+    if not __templates.scanned:
         scan_tpl_dir()
-    return list(__tpl_path_dict.keys())
+    return list(__templates.tpl_paths.keys())
 
 
 def get_prompt(tpl_name: str, requirement: str) -> str:
@@ -52,4 +59,4 @@ def save_template(tpl_name, content):
 
 if __name__ == "__main__":
     scan_tpl_dir()
-    print(__tpl_path_dict)
+    print(__templates.tpl_paths)
