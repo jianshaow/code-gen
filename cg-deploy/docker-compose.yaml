@@ -5,8 +5,8 @@ services:
     pull_policy: always
     restart: unless-stopped
     environment:
-      - https_proxy=${https_proxy}
-      - no_proxy=${no_proxy}
+      - https_proxy=${https_proxy:-}
+      - no_proxy=${no_proxy:-}
       - PROMPT_TPL_DIR=/home/devel/prompts
       - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
       - OPENAI_API_BASE=${OPENAI_API_BASE}
