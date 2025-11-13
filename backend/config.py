@@ -6,16 +6,17 @@ from pydantic import BaseModel
 
 load_dotenv()
 
-openai_api_base: str = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
-openai_api_key: str = os.getenv("OPENAI_API_KEY", "EMPTY")
-openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+OPENAI_BASE_URL: str = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "EMPTY")
+OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
-google_api_key: str = os.getenv("GOOGLE_API_KEY", "")
-google_model: str = os.getenv("GOOGLE_MODEL", "models/gemini-2.5-flash")
+GOOGLE_API_KEY: str = os.getenv("GOOGLE_API_KEY")
+GOOGLE_MODEL: str = os.getenv("GOOGLE_MODEL", "models/gemini-2.5-flash")
 
-ollama_base_url: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
-ollama_api_key: str = os.getenv("OLLAMA_API_KEY", "EMPTY")
-ollama_model: str = os.getenv("OLLAMA_MODEL", "qwen3:0.6b")
+OLLAMA_HOST = os.getenv("OLLAMA_HOST", "localhost")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", f"http://{OLLAMA_HOST}:11434")
+OLLAMA_API_KEY: str = os.getenv("OLLAMA_API_KEY", "EMPTY")
+OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "deepseek-v3.1:671b-cloud")
 
 
 class AppConfig(BaseModel):
@@ -31,16 +32,16 @@ class APIConfig(BaseModel):
 
 __app_config = AppConfig(
     tpl_dir=os.getenv("PROMPT_TPL_DIR", "prompts"),
-    api_spec=os.getenv("API_SPEC", "ollama"),
+    api_spec=os.getenv("API_SPEC", "openai"),
 )
 
 __api_configs: Dict[str, APIConfig] = {
     "openai": APIConfig(
-        base_url=openai_api_base, api_key=openai_api_key, model=openai_model
+        base_url=OPENAI_BASE_URL, api_key=OPENAI_API_KEY, model=OPENAI_MODEL
     ),
-    "google": APIConfig(base_url="", api_key=google_api_key, model=google_model),
+    "google": APIConfig(base_url="", api_key=GOOGLE_API_KEY, model=GOOGLE_MODEL),
     "ollama": APIConfig(
-        base_url=ollama_base_url, api_key=ollama_api_key, model=ollama_model
+        base_url=OLLAMA_BASE_URL, api_key=OLLAMA_API_KEY, model=OLLAMA_MODEL
     ),
 }
 
