@@ -1,12 +1,10 @@
-import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
-import { Marked } from 'marked';
-import { markedHighlight } from 'marked-highlight';
 import React, { ChangeEvent, Component, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchApiConfig, fetchConfig, fetchTemplates, gen_stream, generate } from '../services/backend';
 import './Common.css';
 import './Home.css';
+import MarkdownViewer from './Markdown';
 
 interface HomeState {
   apiSpec: string;
@@ -15,7 +13,6 @@ interface HomeState {
   template: string;
   requirement: string;
   generated: string;
-  highlighted: string;
   copied: boolean;
 }
 
@@ -25,7 +22,7 @@ class Home extends Component<{}, HomeState> {
     this.state = {
       apiSpec: '', model: '', templates: [], template: '',
       requirement: 'make an example', generated: '',
-      highlighted: '', copied: false,
+      copied: false,
     };
   }
 
@@ -57,46 +54,25 @@ class Home extends Component<{}, HomeState> {
 
   handleGenerate = async (e: MouseEvent) => {
     const { template, requirement } = this.state;
-    this.setState({ highlighted: '' });
 
     generate(template, requirement).then(generated => {
-      this.getHighlightedMarkdown(generated).then((highlighted) => {
         this.setState({ generated: generated });
-        this.setState({ highlighted: highlighted });
-      });
     });
   };
 
   handleGenerateStream = async (e: MouseEvent) => {
     const { template, requirement } = this.state;
-    this.setState({ highlighted: '' })
 
     gen_stream(template, requirement, (generated: string) => {
-      this.getHighlightedMarkdown(generated).then((highlighted) => {
-        this.setState({ generated: generated });
-        this.setState({ highlighted: highlighted });
-        if (this.codeRef.current) {
-          this.codeRef.current.scrollTop = this.codeRef.current.scrollHeight;
-        }
-      });
+      this.setState({ generated: generated });
+      if (this.codeRef.current) {
+        this.codeRef.current.scrollTop = this.codeRef.current.scrollHeight;
+      }
     });
   };
 
-  async getHighlightedMarkdown(mdContent: string) {
-    const marked = new Marked(
-      markedHighlight({
-        langPrefix: 'hljs language-',
-        highlight(code, lang, info) {
-          const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-          return hljs.highlight(code, { language }).value;
-        }
-      })
-    );
-    return await marked.parse(mdContent);
-  }
-
   render() {
-    const { apiSpec, model, templates, template, requirement, generated, highlighted, copied } = this.state;
+    const { apiSpec, model, templates, template, requirement, generated, copied } = this.state;
 
     return (
       <div className='main-frame'>
@@ -142,7 +118,7 @@ class Home extends Component<{}, HomeState> {
                 }} style={{ 'textAlign': 'right' }}>Copy</button>
               </div>
             </div>
-            <div ref={this.codeRef} className='markdown-content' dangerouslySetInnerHTML={{ __html: highlighted }} />
+            <MarkdownViewer content={generated} height={426}/>
           </div>
         </div>
       </div>
