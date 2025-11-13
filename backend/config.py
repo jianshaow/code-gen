@@ -8,7 +8,7 @@ load_dotenv()
 
 openai_api_base: str = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
 openai_api_key: str = os.getenv("OPENAI_API_KEY", "EMPTY")
-openai_model: str = os.getenv("OPENAI_MODEL", "gpt-5-mini")
+openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
 google_api_key: str = os.getenv("GOOGLE_API_KEY", "")
 google_model: str = os.getenv("GOOGLE_MODEL", "models/gemini-2.5-flash")
