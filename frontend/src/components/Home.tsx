@@ -83,15 +83,15 @@ class Home extends Component<{}, HomeState> {
         <label>Current Setting</label>
         <div className='info-block'>
           <div>
-            <label>API Spec: </label>
+            <label>API Spec</label>
             <div className='info-value'>{apiSpec}</div>
           </div>
           <div>
-            <label>Model: </label>
+            <label>Model</label>
             <div className='info-value'>{model}</div>
           </div>
           <div>
-            <label>Template: </label>
+            <label>Template</label>
             <div>
               <select value={template} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                 this.setState({ template: e.target.value })
