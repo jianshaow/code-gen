@@ -1,4 +1,4 @@
-import { ChangeEvent, Component, MouseEvent } from 'react';
+import { type ChangeEvent, Component, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
   fetchApiConfig,

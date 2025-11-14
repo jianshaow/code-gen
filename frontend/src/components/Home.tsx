@@ -1,5 +1,5 @@
 import 'highlight.js/styles/github.css';
-import React, { ChangeEvent, Component, MouseEvent } from 'react';
+import React, { type ChangeEvent, Component, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchApiConfig, fetchConfig, fetchTemplates, gen_stream, generate } from '../services/backend';
 import './Common.css';
@@ -52,7 +52,7 @@ class Home extends Component<{}, HomeState> {
     });
   }
 
-  handleGenerate = async (e: MouseEvent) => {
+  handleGenerate = async (_e: MouseEvent) => {
     const { template, requirement } = this.state;
 
     generate(template, requirement).then(generated => {
@@ -60,7 +60,7 @@ class Home extends Component<{}, HomeState> {
     });
   };
 
-  handleGenerateStream = async (e: MouseEvent) => {
+  handleGenerateStream = async (_e: MouseEvent) => {
     const { template, requirement } = this.state;
 
     gen_stream(template, requirement, (generated: string) => {
@@ -118,7 +118,7 @@ class Home extends Component<{}, HomeState> {
               <label>Generated Code</label>
               <div>
                 {copied && <label className='success'>Copied</label>}
-                <button onClick={async (e: MouseEvent) => {
+                <button onClick={async (_e: MouseEvent) => {
                   navigator.clipboard.writeText(generated);
                   this.setState({ copied: true });
                   setTimeout(() => {
