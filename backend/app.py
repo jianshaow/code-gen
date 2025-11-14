@@ -9,7 +9,7 @@ import config
 import generators
 import prompts
 
-frontend = os.path.abspath(os.path.join("../frontend", "build"))
+frontend = os.path.abspath(os.path.join("../frontend", "dist"))
 frontend = os.getenv("FRONTEND_DIR", frontend)
 static_folder = os.path.join(frontend, "static")
 
