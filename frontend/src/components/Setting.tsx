@@ -59,13 +59,13 @@ class Setting extends Component<{}, SettingState> {
     this.initConfig();
   }
 
-  handleSaveBeBaseUrl = async (e: MouseEvent) => {
+  handleSaveBeBaseUrl = async (_e: MouseEvent) => {
     const { beBaseUrl } = this.state;
     setBeBaseUrl(beBaseUrl);
     this.initSetting();
   };
 
-  handleDetectBeBaseUrl = async (e: MouseEvent) => {
+  handleDetectBeBaseUrl = async (_e: MouseEvent) => {
     const protocol = window.location.protocol;
     const host = window.location.host;
     const url = `${protocol}//${host}`;
@@ -88,7 +88,7 @@ class Setting extends Component<{}, SettingState> {
     });
   }
 
-  handleReloadModels = async (e: MouseEvent) => {
+  handleReloadModels = async (_e: MouseEvent) => {
     fetchModels(true).then((models) => {
       const { model } = this.state;
       if (!models.includes(model)) {
@@ -125,27 +125,27 @@ class Setting extends Component<{}, SettingState> {
     })
   }
 
-  handelReloadTemplates = async (e: MouseEvent) => {
+  handelReloadTemplates = async (_e: MouseEvent) => {
     fetchTemplates(true).then(templates => {
       this.setState({ templates: templates, template: templates[0] });
     });
   };
 
-  handleLoadTemplate = async (e: MouseEvent) => {
+  handleLoadTemplate = async (_e: MouseEvent) => {
     const { template } = this.state;
     fetchTemplate(template).then(content => {
       this.setState({ content: content });
     });
   };
 
-  handleSaveTemplate = async (e: MouseEvent) => {
+  handleSaveTemplate = async (_e: MouseEvent) => {
     const { template, content } = this.state;
     updateTemplate(template, content).then(() => {
       alert('Saved!');
     })
   };
 
-  handleSaveConfig = async (e: MouseEvent) => {
+  handleSaveConfig = async (_e: MouseEvent) => {
     const { apiSpec, tplDir } = this.state;
     const config = {
       'api_spec': apiSpec,
@@ -158,7 +158,7 @@ class Setting extends Component<{}, SettingState> {
     })
   };
 
-  handleSaveApiConfig = async (e: MouseEvent) => {
+  handleSaveApiConfig = async (_e: MouseEvent) => {
     const { apiSpec, baseUrl, apiKey, model } = this.state
     const config = {
       'base_url': baseUrl,
