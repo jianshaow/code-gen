@@ -56,7 +56,7 @@ class Home extends Component<{}, HomeState> {
     const { template, requirement } = this.state;
 
     generate(template, requirement).then(generated => {
-        this.setState({ generated: generated });
+      this.setState({ generated: generated });
     });
   };
 
@@ -80,18 +80,27 @@ class Home extends Component<{}, HomeState> {
           <Link to='/setting'>Setting</Link>
         </div>
         <h1 className='title'>Code Generator</h1>
-        <div className='container'>
-          <label className='config-lable'>API Spec: </label>
-          <input value={apiSpec} readOnly style={{ width: 60, marginRight: '5px' }} />
-          <label className='config-lable'>Model: </label>
-          <input value={model} readOnly style={{ marginRight: '5px' }} />
-          <label className='config-lable'>Template: </label>
-          <select value={template} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-            this.setState({ template: e.target.value })
-          }}>{templates.map(data => (
-            <option key={data} value={data}>{data}</option>
-          ))}
-          </select>
+        <label>Current Setting</label>
+        <div className='info-block'>
+          <div>
+            <label>API Spec: </label>
+            <div className='info-value'>{apiSpec}</div>
+          </div>
+          <div>
+            <label>Model: </label>
+            <div className='info-value'>{model}</div>
+          </div>
+          <div>
+            <label>Template: </label>
+            <div>
+              <select value={template} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                this.setState({ template: e.target.value })
+              }}>{templates.map(data => (
+                <option key={data} value={data}>{data}</option>
+              ))}
+              </select>
+            </div>
+          </div>
         </div>
         <div className='container'>
           <div className='requirement-block'>
@@ -118,7 +127,7 @@ class Home extends Component<{}, HomeState> {
                 }} style={{ 'textAlign': 'right' }}>Copy</button>
               </div>
             </div>
-            <MarkdownViewer content={generated} height={426}/>
+            <MarkdownViewer content={generated} height={426} />
           </div>
         </div>
       </div>

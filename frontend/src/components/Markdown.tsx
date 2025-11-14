@@ -8,6 +8,10 @@ import remarkMath from "remark-math";
 import remarkRehype from "remark-rehype";
 import './Markdown.css';
 
+import hljs from "highlight.js/lib/core";
+import groovy from "highlight.js/lib/languages/groovy";
+hljs.registerLanguage("groovy", groovy);
+
 interface MarkdownViewerProps {
   content: string;
   height?: number;
@@ -17,10 +21,10 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content, height = 200 }
   const markdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = markdownRef.current;
-    if (el) {
+    const element = markdownRef.current;
+    if (element) {
       requestAnimationFrame(() => {
-        el.scrollTop = el.scrollHeight;
+        element.scrollTop = element.scrollHeight;
       });
     }
   }, [content]);
@@ -28,8 +32,8 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content, height = 200 }
   return (
     <div ref={markdownRef} className="markdown-frame markdown-body" style={{ height: height }}>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath, remarkRehype]}
-        rehypePlugins={[rehypeHighlight]}
+        remarkPlugins={[remarkGfm, remarkMath]}
+        rehypePlugins={[remarkRehype, rehypeHighlight]}
       >
         {content}
       </ReactMarkdown>
