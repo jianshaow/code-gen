@@ -1,4 +1,5 @@
 import 'github-markdown-css/github-markdown-light.css';
+import groovy from "highlight.js/lib/languages/groovy";
 import "highlight.js/styles/github.css";
 import React, { useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
@@ -25,11 +26,15 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content, height = 200 }
     }
   }, [content]);
 
+  const languages = {
+    groovy,
+  };
+
   return (
     <div ref={markdownRef} className="markdown-frame markdown-body" style={{ height: height }}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeKatex, rehypeHighlight]}
+        rehypePlugins={[[rehypeHighlight, { languages }]]}
       >
         {content}
       </ReactMarkdown>
