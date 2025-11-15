@@ -4,7 +4,6 @@ import "highlight.js/styles/github.css";
 import React, { useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
-import rehypeKatex from 'rehype-katex';
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import './Markdown.css';
