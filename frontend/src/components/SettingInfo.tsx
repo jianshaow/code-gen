@@ -40,6 +40,7 @@ export default function SettingInfo({ onSettingChange }: SettingInfoProps) {
         template: templatesData[0],
       });
     });
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
