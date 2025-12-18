@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent } from 'react';
-import { getBeBaseUrl, setBeBaseUrl } from '../services/backend';
+import { getBeBaseUrl, setBeBaseUrl } from '../../../services/backend';
 
 export default function BackendBaseUrlSetting({ onChange }: { onChange?: () => void }) {
   const [beBaseUrl, setBeBaseUrlState] = useState(getBeBaseUrl());

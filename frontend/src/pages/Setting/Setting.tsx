@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ApiConfigSetting from './ApiConfigSetting';
-import BackendBaseUrlSetting from './BackendBaseUrlSetting';
-import BackendConfigSetting from './BackendConfigSetting';
-import './Common.css';
+import ApiConfigSetting from './components/ApiConfigSetting';
+import BackendBaseUrlSetting from './components/BackendBaseUrlSetting';
+import BackendConfigSetting from './components/BackendConfigSetting';
+import TemplateEditor from './components/TemplateEditor';
+import '../../styles/Common.css';
 import './Setting.css';
-import TemplateEditor from './TemplateEditor';
 
 
 function Setting() {

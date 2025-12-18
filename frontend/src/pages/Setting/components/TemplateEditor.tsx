@@ -1,5 +1,5 @@
 import { useEffect, useState, type ChangeEvent } from 'react';
-import { fetchTemplate, fetchTemplates, updateTemplate } from '../services/backend';
+import { fetchTemplate, fetchTemplates, updateTemplate } from '../../../services/backend';
 
 export default function TemplateEditor() {
     const [templates, setTemplates] = useState<string[]>([]);

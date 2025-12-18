@@ -2,10 +2,10 @@ import 'highlight.js/styles/github.css';
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Common.css';
-import Generator from './Generator';
+import '../../styles/Common.css';
+import Generator from './components/Generator';
+import SettingInfo from './components/SettingInfo';
 import './Home.css';
-import SettingInfo from './SettingInfo';
 
 function Home() {
   const [template, setTemplate] = useState('');

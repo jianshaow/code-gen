@@ -1,6 +1,6 @@
 import { useEffect, useState, type ChangeEvent } from 'react';
-import { fetchApiConfig, fetchConfig, fetchTemplates } from '../services/backend';
-import './Common.css';
+import { fetchApiConfig, fetchConfig, fetchTemplates } from '../../../services/backend';
+import '../../../styles/Common.css';
 
 interface SettingInfoProps {
   onSettingChange: (setting: {

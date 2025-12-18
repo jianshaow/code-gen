@@ -1,7 +1,7 @@
 import { useRef, useState, type ChangeEvent } from 'react';
-import { gen_stream } from '../services/backend';
-import './Common.css';
-import MarkdownViewer from './Markdown';
+import MarkdownViewer from '../../../components/Markdown';
+import { gen_stream } from '../../../services/backend';
+import '../../../styles/Common.css';
 
 interface GeneratorProps {
   template: string;
