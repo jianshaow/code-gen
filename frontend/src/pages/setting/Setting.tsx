@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ApiConfigSetting from './components/ApiConfigSetting';
-import BackendBaseUrlSetting from './components/BackendBaseUrlSetting';
-import BackendConfigSetting from './components/BackendConfigSetting';
-import TemplateEditor from './components/TemplateEditor';
 import '../../styles/Common.css';
+import AppConfigSetting from './components/AppConfig';
+import GeneralConfigSetting from './components/GeneralConfig';
+import ModelConfigSetting from './components/ModelConfig';
+import TemplateEditor from './components/TemplateEditor';
 import './Setting.css';
 
 
@@ -17,9 +17,9 @@ function Setting() {
         <Link to='/'>Return Home</Link>
       </div>
       <h1 className='title'>Settings</h1>
-      <BackendBaseUrlSetting onChange={() => { }} />
-      <BackendConfigSetting onChange={setApiSpec} />
-      <ApiConfigSetting apiSpec={apiSpec} />
+      <GeneralConfigSetting onChange={() => { }} />
+      <AppConfigSetting onChange={setApiSpec} />
+      <ModelConfigSetting apiSpec={apiSpec} />
       <TemplateEditor />
     </div>
   );

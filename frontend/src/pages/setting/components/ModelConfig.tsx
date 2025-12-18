@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { fetchApiConfig, fetchModels, updateApiConfig } from '../../../services/backend';
 
-export default function ApiConfigSetting({ apiSpec }: { apiSpec: string }) {
+export default function ModelConfigSetting({ apiSpec }: { apiSpec: string }) {
   const [baseUrl, setBaseUrl] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [models, setModels] = useState<string[]>([]);

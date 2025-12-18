@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent } from 'react';
 import { getBeBaseUrl, setBeBaseUrl } from '../../../services/backend';
 
-export default function BackendBaseUrlSetting({ onChange }: { onChange?: () => void }) {
+export default function GeneralConfigSetting({ onChange }: { onChange?: () => void }) {
   const [beBaseUrl, setBeBaseUrlState] = useState(getBeBaseUrl());
 
   const handleSaveBeBaseUrl = async () => {

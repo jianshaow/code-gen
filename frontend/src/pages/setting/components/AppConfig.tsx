@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { fetchApiSpecs, fetchConfig, updateConfig } from '../../../services/backend';
 
-export default function BackendConfigSetting({ onChange }: { onChange?: (apiSpec: string) => void }) {
+export default function AppConfigSetting({ onChange }: { onChange?: (apiSpec: string) => void }) {
   const [apiSpecs, setApiSpecs] = useState<string[]>([]);
   const [apiSpec, setApiSpec] = useState('');
   const [tplDir, setTplDir] = useState('');
