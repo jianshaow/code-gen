@@ -18,19 +18,23 @@ export default function ModelConfigSetting() {
       'api_key': modelConfig.apiKey,
       'model': modelConfig.model,
     };
-    updateApiConfig(settingContext.appConfig.apiSpec, JSON.stringify(config)).then(() => {
+    updateApiConfig(settingContext.appConfig.modelProvider, JSON.stringify(config)).then(() => {
       alert('API Config Saved!');
     });
+    settingContext.setModelConfig(modelConfig)
   };
 
   useEffect(() => {
     fetchModels(false).then(setModels);
-    setModelConfig(settingContext.modelConfig);
+    async function reload() {
+      setModelConfig(settingContext.modelConfig)
+    }
+    reload()
   }, [settingContext.modelConfig]);
 
   return (
     <>
-      <label className='title'>API Config</label>
+      <label className='title'>Model Config</label>
       <div className='setting-container'>
         <div className='setting'>
           <div>

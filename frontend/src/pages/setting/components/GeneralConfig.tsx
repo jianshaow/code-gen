@@ -5,7 +5,7 @@ import { storeBeBaseUrl } from '../../../services/backend';
 
 export default function GeneralConfigSetting() {
   const settingContext = useSetting();
-  const [beBaseUrl, setBeBaseUrl] = useState<string>('');
+  const [beBaseUrl, setBeBaseUrl] = useState<string>(settingContext.beBaseUrl);
 
   function handleSaveBeBaseUrl() {
     storeBeBaseUrl(beBaseUrl);
@@ -21,9 +21,10 @@ export default function GeneralConfigSetting() {
   };
 
   useEffect(() => {
-    if (settingContext.beBaseUrl) {
+    async function reload() {
       setBeBaseUrl(settingContext.beBaseUrl);
     }
+    reload()
   }, [settingContext.beBaseUrl]);
 
   return (

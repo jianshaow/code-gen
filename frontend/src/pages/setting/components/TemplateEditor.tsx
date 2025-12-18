@@ -1,15 +1,14 @@
 
-import { useSetting } from '../../../context/SettingContext';
-import { updateTemplate, fetchTemplates, fetchTemplate } from '../../../services/backend';
-import type { ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
+import { fetchTemplate, fetchTemplates, updateTemplate } from '../../../services/backend';
 
 export default function TemplateEditor() {
-  const { templates, template, setTemplate, content, setContent } = useSetting();
+  const [templates, setTemplates] = useState<string[]>([]);
+  const [template, setTemplate] = useState('');
+  const [content, setContent] = useState('');
 
   const handelReloadTemplates = async () => {
-    fetchTemplates(true).then(templatesData => {
-      setTemplate(templatesData[0] || '');
-    });
+    fetchTemplates(true).then(setTemplates);
   };
 
   const handleLoadTemplate = async () => {
@@ -23,6 +22,13 @@ export default function TemplateEditor() {
       alert('Saved!');
     });
   };
+
+  useEffect(() => {
+    fetchTemplates(false).then((templates) => {
+      setTemplates(templates);
+      setTemplate(templates[0])
+    });
+  }, []);
 
   return (
     <>

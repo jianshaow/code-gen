@@ -8,12 +8,8 @@ interface SettingContextType {
   setAppConfig: React.Dispatch<React.SetStateAction<AppConfig>>;
   modelConfig: ModelConfig;
   setModelConfig: React.Dispatch<React.SetStateAction<ModelConfig>>;
-  templates: string[];
-  template: string;
-  setTemplate: (v: string) => void;
-  content: string;
-  setContent: (v: string) => void;
-  refreshAll: () => void;
+  appConfigLoading: boolean;
+  modelConfigLoading: boolean;
 }
 
 export const SettingContext = createContext<SettingContextType | undefined>(undefined);

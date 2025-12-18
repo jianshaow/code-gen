@@ -6,22 +6,18 @@ import ModelConfigSetting from './components/ModelConfig';
 import TemplateEditor from './components/TemplateEditor';
 import './Setting.css';
 
-import { SettingProvider } from '../../context/SettingProvider';
-
 function Setting() {
   return (
-    <SettingProvider>
-      <div className='main-frame'>
-        <div className='header'>
-          <Link to='/'>Return Home</Link>
-        </div>
-        <h1 className='title'>Settings</h1>
-        <GeneralConfigSetting />
-        <AppConfigSetting />
-        <ModelConfigSetting />
-        <TemplateEditor />
+    <div className='main-frame'>
+      <div className='header'>
+        <Link to='/'>Return Home</Link>
       </div>
-    </SettingProvider>
+      <h1 className='title'>Settings</h1>
+      <GeneralConfigSetting />
+      <AppConfigSetting />
+      <ModelConfigSetting />
+      <TemplateEditor />
+    </div>
   );
 }
 

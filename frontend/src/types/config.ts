@@ -1,5 +1,5 @@
 export interface AppConfig {
-  apiSpec: string;
+  modelProvider: string;
   tplDir: string;
 }
 
