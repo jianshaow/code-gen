@@ -1,23 +1,23 @@
 
-function setBeBaseUrl(beBaseUrl: string) {
+export function storeBeBaseUrl(beBaseUrl: string) {
   localStorage.setItem('beBaseUrl', beBaseUrl);
 }
 
-function getBeBaseUrl() {
+export function getBeBaseUrl() {
   let beBaseUrl = localStorage.getItem('beBaseUrl');
   if (beBaseUrl === null) {
     beBaseUrl = "http://localhost:8000";
-    setBeBaseUrl(beBaseUrl);
+    storeBeBaseUrl(beBaseUrl);
   }
   return beBaseUrl;
 }
 
-async function fetchConfig() {
+export async function fetchConfig() {
   const url = `${getBeBaseUrl()}/config`;
   return fetch(url).then(response => response.json());
 }
 
-async function updateConfig(config: string) {
+export async function updateConfig(config: string) {
   const url = `${getBeBaseUrl()}/config`;
   fetch(url, {
     method: 'PUT',
@@ -26,17 +26,17 @@ async function updateConfig(config: string) {
   })
 }
 
-async function fetchApiSpecs() {
+export async function fetchApiSpecs() {
   const url = `${getBeBaseUrl()}/api_spec`
   return fetch(url).then(response => response.json());
 }
 
-async function fetchApiConfig(api_spec: string) {
+export async function fetchApiConfig(api_spec: string) {
   const url = `${getBeBaseUrl()}/api_spec/${api_spec}`;
   return fetch(url).then(response => response.json());
 }
 
-async function updateApiConfig(api_spec: string, config: string) {
+export async function updateApiConfig(api_spec: string, config: string) {
   const url = `${getBeBaseUrl()}/api_spec/${api_spec}`;
   fetch(url, {
     method: 'PUT',
@@ -45,22 +45,22 @@ async function updateApiConfig(api_spec: string, config: string) {
   })
 }
 
-async function fetchModels(reload: boolean) {
+export async function fetchModels(reload: boolean) {
   const url = `${getBeBaseUrl()}/models?reload=${reload}`
   return fetch(url).then(response => response.json());
 }
 
-async function fetchTemplates(reload: boolean) {
+export async function fetchTemplates(reload: boolean) {
   const url = `${getBeBaseUrl()}/template?reload=${reload}`
   return fetch(url).then(response => response.json());
 }
 
-async function fetchTemplate(template: string) {
+export async function fetchTemplate(template: string) {
   const url = `${getBeBaseUrl()}/template/${template}`;
   return fetch(url).then(response => response.text());
 }
 
-async function updateTemplate(template: string, content: string) {
+export async function updateTemplate(template: string, content: string) {
   const url = `${getBeBaseUrl()}/template/${template}`;
   fetch(url, {
     method: 'PUT',
@@ -69,7 +69,7 @@ async function updateTemplate(template: string, content: string) {
   })
 }
 
-async function generate(template: string, requirement: string) {
+export async function generate(template: string, requirement: string) {
   const url = `${getBeBaseUrl()}/${template}/generate`;
   return fetch(url, {
     method: 'POST',
@@ -78,7 +78,7 @@ async function generate(template: string, requirement: string) {
   }).then(response => response.text());
 }
 
-async function gen_stream(template: string, requirement: string, onTextProcess: (generated: string) => void) {
+export async function gen_stream(template: string, requirement: string, onTextProcess: (generated: string) => void) {
   const url = `${getBeBaseUrl()}/${template}/gen_stream`;
   const resp = await fetch(url, {
     method: 'POST',
@@ -103,8 +103,3 @@ async function gen_stream(template: string, requirement: string, onTextProcess: 
     onTextProcess(accumulatedText);
   }
 }
-
-export {
-  fetchApiConfig, fetchApiSpecs, fetchConfig, fetchModels, fetchTemplate, fetchTemplates, gen_stream, generate, getBeBaseUrl,
-  setBeBaseUrl, updateApiConfig, updateConfig, updateTemplate
-};

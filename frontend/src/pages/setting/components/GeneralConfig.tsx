@@ -1,20 +1,30 @@
-import { useState, type ChangeEvent } from 'react';
-import { getBeBaseUrl, setBeBaseUrl } from '../../../services/backend';
 
-export default function GeneralConfigSetting({ onChange }: { onChange?: () => void }) {
-  const [beBaseUrl, setBeBaseUrlState] = useState(getBeBaseUrl());
+import { useEffect, useState, type ChangeEvent } from 'react';
+import { useSetting } from '../../../context/SettingContext';
+import { storeBeBaseUrl } from '../../../services/backend';
 
-  const handleSaveBeBaseUrl = async () => {
-    setBeBaseUrl(beBaseUrl);
-    onChange && onChange();
-  };
+export default function GeneralConfigSetting() {
+  const settingContext = useSetting();
+  const [beBaseUrl, setBeBaseUrl] = useState<string>('');
+
+  function handleSaveBeBaseUrl() {
+    storeBeBaseUrl(beBaseUrl);
+    alert('Backend Base URL Saved!');
+    settingContext.setBeBaseUrl(beBaseUrl);
+  }
 
   const handleDetectBeBaseUrl = async () => {
     const protocol = window.location.protocol;
     const host = window.location.host;
     const url = `${protocol}//${host}`;
-    setBeBaseUrlState(url);
+    setBeBaseUrl(url);
   };
+
+  useEffect(() => {
+    if (settingContext.beBaseUrl) {
+      setBeBaseUrl(settingContext.beBaseUrl);
+    }
+  }, [settingContext.beBaseUrl]);
 
   return (
     <>
@@ -27,7 +37,7 @@ export default function GeneralConfigSetting({ onChange }: { onChange?: () => vo
               type='text'
               value={beBaseUrl}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setBeBaseUrlState(e.target.value);
+                setBeBaseUrl(e.target.value);
               }}
             />
             <button onClick={handleSaveBeBaseUrl}>Save</button>

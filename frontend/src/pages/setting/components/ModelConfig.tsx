@@ -1,41 +1,32 @@
-import { useEffect, useState, type ChangeEvent } from 'react';
-import { fetchApiConfig, fetchModels, updateApiConfig } from '../../../services/backend';
 
-export default function ModelConfigSetting({ apiSpec }: { apiSpec: string }) {
-  const [baseUrl, setBaseUrl] = useState('');
-  const [apiKey, setApiKey] = useState('');
+import { type ChangeEvent, useEffect, useState } from 'react';
+import { useSetting } from '../../../context/SettingContext';
+import { fetchModels, updateApiConfig } from '../../../services/backend';
+
+export default function ModelConfigSetting() {
+  const settingContext = useSetting();
+  const [modelConfig, setModelConfig] = useState(settingContext.modelConfig);
   const [models, setModels] = useState<string[]>([]);
-  const [model, setModel] = useState('');
-
-  useEffect(() => {
-    if (apiSpec) {
-      fetchApiConfig(apiSpec).then((config) => {
-        setBaseUrl(config.base_url || "");
-        setApiKey(config.api_key || "");
-        setModel(config.model);
-      });
-      fetchModels(false).then((modelsData) => {
-        setModels(modelsData);
-      });
-    }
-  }, [apiSpec]);
 
   const handleReloadModels = async () => {
-    fetchModels(true).then((modelsData) => {
-      setModels(modelsData);
-    });
+    fetchModels(true).then(setModels);
   };
 
   const handleSaveApiConfig = async () => {
     const config = {
-      'base_url': baseUrl,
-      'api_key': apiKey,
-      'model': model,
+      'base_url': modelConfig.baseUrl,
+      'api_key': modelConfig.apiKey,
+      'model': modelConfig.model,
     };
-    updateApiConfig(apiSpec, JSON.stringify(config)).then(() => {
+    updateApiConfig(settingContext.appConfig.apiSpec, JSON.stringify(config)).then(() => {
       alert('API Config Saved!');
     });
   };
+
+  useEffect(() => {
+    fetchModels(false).then(setModels);
+    setModelConfig(settingContext.modelConfig);
+  }, [settingContext.modelConfig]);
 
   return (
     <>
@@ -46,9 +37,9 @@ export default function ModelConfigSetting({ apiSpec }: { apiSpec: string }) {
             <label className='config-lable'>API Base URL: </label>
             <input
               type='text'
-              value={baseUrl}
+              value={modelConfig.baseUrl}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setBaseUrl(e.target.value);
+                setModelConfig({ ...modelConfig, baseUrl: e.target.value });
               }}
               style={{ width: 240 }}
             />
@@ -59,9 +50,9 @@ export default function ModelConfigSetting({ apiSpec }: { apiSpec: string }) {
             <label className='config-lable'>API Key: </label>
             <input
               type='text'
-              value={apiKey}
+              value={modelConfig.apiKey}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setApiKey(e.target.value);
+                setModelConfig({ ...modelConfig, apiKey: e.target.value });
               }}
               style={{ width: 280 }}
             />
@@ -70,8 +61,8 @@ export default function ModelConfigSetting({ apiSpec }: { apiSpec: string }) {
         <div className='setting'>
           <div>
             <label className='config-lable'>Model: </label>
-            <select value={model} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-              setModel(e.target.value);
+            <select value={modelConfig.model} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+              setModelConfig({ ...modelConfig, model: e.target.value });
             }}>{models.map(model => (
               <option key={model} value={model}>{model}</option>
             ))}

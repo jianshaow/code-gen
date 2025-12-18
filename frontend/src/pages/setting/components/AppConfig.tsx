@@ -1,29 +1,28 @@
+
 import { useEffect, useState, type ChangeEvent } from 'react';
-import { fetchApiSpecs, fetchConfig, updateConfig } from '../../../services/backend';
+import { useSetting } from '../../../context/SettingContext';
+import { fetchApiSpecs, updateConfig } from '../../../services/backend';
+import type { AppConfig } from '../../../types/config';
 
-export default function AppConfigSetting({ onChange }: { onChange?: (apiSpec: string) => void }) {
+export default function AppConfigSetting() {
+  const settingContext = useSetting();
   const [apiSpecs, setApiSpecs] = useState<string[]>([]);
-  const [apiSpec, setApiSpec] = useState('');
-  const [tplDir, setTplDir] = useState('');
-
-  useEffect(() => {
-    fetchApiSpecs().then(setApiSpecs);
-    fetchConfig().then(config => {
-      setApiSpec(config.api_spec);
-      setTplDir(config.tpl_dir);
-    });
-  }, []);
+  const [appConfig, setAppConfig] = useState<AppConfig>(settingContext.appConfig);
 
   const handleSaveConfig = async () => {
     const config = {
-      'api_spec': apiSpec,
-      'tpl_dir': tplDir,
+      'api_spec': appConfig.apiSpec,
+      'tpl_dir': appConfig.tplDir,
     };
     updateConfig(JSON.stringify(config)).then(() => {
       alert('Setting Saved!');
-      onChange && onChange(apiSpec);
     });
   };
+
+  useEffect(() => {
+    fetchApiSpecs().then(setApiSpecs);
+    setAppConfig(settingContext.appConfig);
+  }, [settingContext.appConfig]);
 
   return (
     <>
@@ -32,8 +31,8 @@ export default function AppConfigSetting({ onChange }: { onChange?: (apiSpec: st
         <div className='setting'>
           <div>
             <label className='config-lable'>API Spec: </label>
-            <select value={apiSpec} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-              setApiSpec(e.target.value);
+            <select value={appConfig.apiSpec} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+              setAppConfig(prev => ({ ...prev, apiSpec: e.target.value }));
             }}>{apiSpecs.map(apiSpec => (
               <option key={apiSpec} value={apiSpec}>{apiSpec}</option>
             ))}
@@ -45,9 +44,9 @@ export default function AppConfigSetting({ onChange }: { onChange?: (apiSpec: st
             <label className='config-lable'>Template Dir: </label>
             <input
               type='text'
-              value={tplDir}
+              value={appConfig.tplDir}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setTplDir(e.target.value);
+                setAppConfig(prev => ({ ...prev, tplDir: e.target.value }));
               }}
             />
           </div>
