@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { fetchApiConfig, fetchConfig, getBeBaseUrl } from '../services/backend';
+import { fetchApiConfig, fetchConfig, fetchTemplates, getBeBaseUrl } from '../services/backend';
 import type { AppConfig, ModelConfig } from '../types/config';
 import { SettingContext } from './SettingContext';
 
@@ -8,14 +8,15 @@ export function SettingProvider({ children }: React.PropsWithChildren) {
   const [beBaseUrl, setBeBaseUrl] = useState<string>(getBeBaseUrl());
   const [appConfig, setAppConfig] = useState<AppConfig>({ modelProvider: '', tplDir: '' });
   const [modelConfig, setModelConfig] = useState<ModelConfig>({ baseUrl: '', apiKey: '', model: '' });
+  const [templates, setTemplates] = useState<string[]>([]);
+  const [template, setTemplate] = useState<string>('');
   const [appConfigLoading, setAppConfigLoading] = useState(false);
   const [modelConfigLoading, setModelConfigLoading] = useState(false)
 
-  async function loadConfig() {
+  async function loadAppConfig() {
     setAppConfigLoading(true);
     const appConfig = await fetchConfig();
     setAppConfig({ modelProvider: appConfig.api_spec || '', tplDir: appConfig.tpl_dir || '' });
-    // await loadModelConfig(appConfig.api_spec);
     setAppConfigLoading(false);
   };
 
@@ -33,10 +34,13 @@ export function SettingProvider({ children }: React.PropsWithChildren) {
 
   useEffect(() => {
     async function reload() {
-      await loadConfig();
+      await loadAppConfig();
     }
     reload()
-    // eslint-disable-next-line
+    fetchTemplates(false).then((templates) => {
+      setTemplates(templates);
+      setTemplate(templates[0] || '');
+    })
   }, [beBaseUrl]);
 
   useEffect(() => {
@@ -48,13 +52,14 @@ export function SettingProvider({ children }: React.PropsWithChildren) {
     }
   }, [appConfig.modelProvider]);
 
-
   return (
     <SettingContext.Provider
       value={{
         beBaseUrl, setBeBaseUrl,
         appConfig, setAppConfig,
         modelConfig, setModelConfig,
+        templates, setTemplates,
+        template, setTemplate,
         appConfigLoading, modelConfigLoading,
       }}
     >

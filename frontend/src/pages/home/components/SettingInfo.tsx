@@ -1,52 +1,19 @@
 import { useEffect, useState, type ChangeEvent } from 'react';
-import { fetchApiConfig, fetchConfig, fetchTemplates } from '../../../services/backend';
+import { useSetting } from '../../../context/SettingContext';
 import '../../../styles/Common.css';
 
-interface SettingInfoProps {
-  onSettingChange: (setting: {
-    apiSpec: string;
-    model: string;
-    templates: string[];
-    template: string;
-  }) => void;
-}
-
-export default function SettingInfo({ onSettingChange }: SettingInfoProps) {
+export default function SettingInfo() {
+  const { templates, appConfig, modelConfig, template, setTemplate } = useSetting();
   const [apiSpec, setApiSpec] = useState('');
   const [model, setModel] = useState('');
-  const [templates, setTemplates] = useState<string[]>([]);
-  const [template, setTemplate] = useState('');
 
   useEffect(() => {
-    fetchConfig().then(config => {
-      setApiSpec(config.api_spec);
-      fetchApiConfig(config.api_spec).then(config2 => {
-        setModel(config2.model);
-        onSettingChange({
-          apiSpec: config.api_spec,
-          model: config2.model,
-          templates,
-          template,
-        });
-      });
-    });
-    fetchTemplates(false).then(templatesData => {
-      setTemplates(templatesData);
-      setTemplate(templatesData[0]);
-      onSettingChange({
-        apiSpec,
-        model,
-        templates: templatesData,
-        template: templatesData[0],
-      });
-    });
-    // eslint-disable-next-line
-  }, []);
+    setApiSpec(appConfig.modelProvider);
+  }, [appConfig]);
 
   useEffect(() => {
-    onSettingChange({ apiSpec, model, templates, template });
-    // eslint-disable-next-line
-  }, [apiSpec, model, templates, template]);
+    setModel(modelConfig.model);
+  }, [modelConfig]);
 
   return (
     <>

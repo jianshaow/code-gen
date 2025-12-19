@@ -1,13 +1,11 @@
 import { useRef, useState, type ChangeEvent } from 'react';
 import MarkdownViewer from '../../../components/Markdown';
+import { useSetting } from '../../../context/SettingContext';
 import { gen_stream } from '../../../services/backend';
 import '../../../styles/Common.css';
 
-interface GeneratorProps {
-  template: string;
-}
-
-export default function Generator({ template }: GeneratorProps) {
+export default function Generator() {
+  const { template } = useSetting();
   const [requirement, setRequirement] = useState('make an example');
   const [generated, setGenerated] = useState('');
   const [copied, setCopied] = useState(false);

@@ -1,9 +1,10 @@
 
 import { useEffect, useState, type ChangeEvent } from 'react';
+import { useSetting } from '../../../context/SettingContext';
 import { fetchTemplate, fetchTemplates, updateTemplate } from '../../../services/backend';
 
 export default function TemplateEditor() {
-  const [templates, setTemplates] = useState<string[]>([]);
+  const { templates, setTemplates } = useSetting();
   const [template, setTemplate] = useState('');
   const [content, setContent] = useState('');
 
@@ -12,8 +13,8 @@ export default function TemplateEditor() {
   };
 
   const handleLoadTemplate = async () => {
-    fetchTemplate(template).then(contentData => {
-      setContent(contentData);
+    fetchTemplate(template).then(content => {
+      setContent(content);
     });
   };
 
@@ -24,11 +25,11 @@ export default function TemplateEditor() {
   };
 
   useEffect(() => {
-    fetchTemplates(false).then((templates) => {
-      setTemplates(templates);
+    async function reload() {
       setTemplate(templates[0])
-    });
-  }, []);
+    }
+    reload()
+  }, [templates]);
 
   return (
     <>

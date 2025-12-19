@@ -8,6 +8,10 @@ interface SettingContextType {
   setAppConfig: React.Dispatch<React.SetStateAction<AppConfig>>;
   modelConfig: ModelConfig;
   setModelConfig: React.Dispatch<React.SetStateAction<ModelConfig>>;
+  templates: string[];
+  setTemplates: React.Dispatch<React.SetStateAction<string[]>>;
+  template: string;
+  setTemplate: React.Dispatch<React.SetStateAction<string>>;
   appConfigLoading: boolean;
   modelConfigLoading: boolean;
 }
