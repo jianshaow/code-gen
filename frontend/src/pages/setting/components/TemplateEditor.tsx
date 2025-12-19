@@ -2,6 +2,7 @@
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { useSetting } from '../../../context/SettingContext';
 import { fetchTemplate, fetchTemplates, updateTemplate } from '../../../services/backend';
+import MarkdownViewer from '../../../components/Markdown';
 
 export default function TemplateEditor() {
   const { templates, setTemplates } = useSetting();
@@ -47,10 +48,19 @@ export default function TemplateEditor() {
           <button onClick={handleLoadTemplate}>Load</button>
           <button onClick={handleSaveTemplate}>Save</button>
         </div>
-        <textarea value={content} rows={20}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-            setContent(e.target.value);
-          }} />
+        <div className='container' style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <textarea
+            value={content}
+            rows={20}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+              setContent(e.target.value);
+            }}
+            style={{ width: '40%' }}
+          />
+          <div style={{ width: '60%' }}>
+            <MarkdownViewer content={content} style={{ height: 340 }} />
+          </div>
+        </div>
       </div>
     </>
   );

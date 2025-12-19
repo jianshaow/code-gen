@@ -46,7 +46,7 @@ export default function Generator() {
             }} style={{ textAlign: 'right' }}>Copy</button>
           </div>
         </div>
-        <MarkdownViewer content={generated} height={426} />
+        <MarkdownViewer content={generated} style={{ height: 426 }} />
       </div>
     </div>
   );

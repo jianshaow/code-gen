@@ -10,10 +10,10 @@ import './Markdown.css';
 
 interface MarkdownViewerProps {
   content: string;
-  height?: number;
+  style?: React.CSSProperties;
 }
 
-const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content, height = 200 }) => {
+const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content, style = { height: 200 } }) => {
   const markdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content, height = 200 }
   };
 
   return (
-    <div ref={markdownRef} className="markdown-frame markdown-body" style={{ height: height }}>
+    <div ref={markdownRef} className="markdown-frame markdown-body" style={style}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[[rehypeHighlight, { languages }]]}
