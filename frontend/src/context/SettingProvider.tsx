@@ -42,16 +42,18 @@ export function SettingProvider({ children }: React.PropsWithChildren) {
   }
 
   useEffect(() => {
-    async function reload() {
-      fetchModelProviders().then(setModelProviders);
-      await loadAppConfig();
-      loadTemplates();
+    if (beBaseUrl != '') {
+      async function reload() {
+        fetchModelProviders().then(setModelProviders);
+        await loadAppConfig();
+        loadTemplates();
+      }
+      reload()
     }
-    reload()
   }, [beBaseUrl]);
 
   useEffect(() => {
-    if (appConfig.modelProvider) {
+    if (appConfig.modelProvider != '') {
       async function reload() {
         fetchModels(false).then(setModels);
         await loadModelConfig(appConfig.modelProvider);

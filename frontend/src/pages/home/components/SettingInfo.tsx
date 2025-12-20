@@ -4,12 +4,12 @@ import '../../../styles/Common.css';
 
 export default function SettingInfo() {
   const { templates, appConfig, modelConfig, template, setTemplate } = useSetting();
-  const [apiSpec, setApiSpec] = useState('');
+  const [modelProvider, setModelProvider] = useState('');
   const [model, setModel] = useState('');
 
   useEffect(() => {
-    setApiSpec(appConfig.modelProvider);
-  }, [appConfig]);
+    setModelProvider(appConfig.modelProvider);
+  }, [appConfig.modelProvider]);
 
   useEffect(() => {
     setModel(modelConfig.model);
@@ -20,8 +20,8 @@ export default function SettingInfo() {
       <label>Current Setting</label>
       <div className='info-block'>
         <div>
-          <label>API Spec</label>
-          <div className='info-value'>{apiSpec}</div>
+          <label>Model Provider</label>
+          <div className='info-value'>{modelProvider}</div>
         </div>
         <div>
           <label>Model</label>
