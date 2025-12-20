@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { fetchApiConfig, fetchConfig, fetchTemplates, getBeBaseUrl } from '../services/backend';
+import { fetchModelConfig, fetchAppConfig, fetchTemplates, getBeBaseUrl } from '../services/backend';
 import type { AppConfig, ModelConfig } from '../types/config';
 import { SettingContext } from './SettingContext';
 
@@ -15,7 +15,7 @@ export function SettingProvider({ children }: React.PropsWithChildren) {
 
   async function loadAppConfig() {
     setAppConfigLoading(true);
-    const appConfig = await fetchConfig();
+    const appConfig = await fetchAppConfig();
     setAppConfig({ modelProvider: appConfig.api_spec || '', tplDir: appConfig.tpl_dir || '' });
     setAppConfigLoading(false);
   };
@@ -23,7 +23,7 @@ export function SettingProvider({ children }: React.PropsWithChildren) {
   async function loadModelConfig(modelProvider: string) {
     setModelConfigLoading(true)
     if (!modelProvider) return;
-    const modelConfig = await fetchApiConfig(modelProvider);
+    const modelConfig = await fetchModelConfig(modelProvider);
     setModelConfig({
       baseUrl: modelConfig.base_url || '',
       apiKey: modelConfig.api_key || '',

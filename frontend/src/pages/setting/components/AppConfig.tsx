@@ -1,7 +1,7 @@
 
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { useSetting } from '../../../context/SettingContext';
-import { fetchApiSpecs, updateConfig } from '../../../services/backend';
+import { fetchModelProviders, updateAppConfig } from '../../../services/backend';
 import type { AppConfig } from '../../../types/config';
 
 export default function AppConfigSetting() {
@@ -14,14 +14,14 @@ export default function AppConfigSetting() {
       'api_spec': appConfig.modelProvider,
       'tpl_dir': appConfig.tplDir,
     };
-    updateConfig(JSON.stringify(config)).then(() => {
+    updateAppConfig(JSON.stringify(config)).then(() => {
       alert('Setting Saved!');
     });
     settingContext.setAppConfig(appConfig)
   };
 
   useEffect(() => {
-    fetchApiSpecs().then(setModelProviders);
+    fetchModelProviders().then(setModelProviders);
     async function reload() {
       setAppConfig(settingContext.appConfig)
     }
@@ -34,7 +34,7 @@ export default function AppConfigSetting() {
       <div className='setting-container'>
         <div className='setting'>
           <div>
-            <label className='config-lable'>API Spec: </label>
+            <label className='config-lable'>Model Provider: </label>
             <select value={appConfig.modelProvider} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
               setAppConfig(prev => ({ ...prev, modelProvider: e.target.value }));
             }}>{modelProviders.map(modelProvider => (

@@ -12,12 +12,12 @@ export function getBeBaseUrl() {
   return beBaseUrl;
 }
 
-export async function fetchConfig() {
+export async function fetchAppConfig() {
   const url = `${getBeBaseUrl()}/config`;
   return fetch(url).then(response => response.json());
 }
 
-export async function updateConfig(config: string) {
+export async function updateAppConfig(config: string) {
   const url = `${getBeBaseUrl()}/config`;
   fetch(url, {
     method: 'PUT',
@@ -26,17 +26,17 @@ export async function updateConfig(config: string) {
   })
 }
 
-export async function fetchApiSpecs() {
+export async function fetchModelProviders() {
   const url = `${getBeBaseUrl()}/api_spec`
   return fetch(url).then(response => response.json());
 }
 
-export async function fetchApiConfig(api_spec: string) {
+export async function fetchModelConfig(api_spec: string) {
   const url = `${getBeBaseUrl()}/api_spec/${api_spec}`;
   return fetch(url).then(response => response.json());
 }
 
-export async function updateApiConfig(api_spec: string, config: string) {
+export async function updateModelConfig(api_spec: string, config: string) {
   const url = `${getBeBaseUrl()}/api_spec/${api_spec}`;
   fetch(url, {
     method: 'PUT',

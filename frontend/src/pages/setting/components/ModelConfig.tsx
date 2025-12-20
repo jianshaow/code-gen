@@ -1,7 +1,7 @@
 
 import { type ChangeEvent, useEffect, useState } from 'react';
 import { useSetting } from '../../../context/SettingContext';
-import { fetchModels, updateApiConfig } from '../../../services/backend';
+import { fetchModels, updateModelConfig } from '../../../services/backend';
 
 export default function ModelConfigSetting() {
   const settingContext = useSetting();
@@ -12,13 +12,13 @@ export default function ModelConfigSetting() {
     fetchModels(true).then(setModels);
   };
 
-  const handleSaveApiConfig = async () => {
+  const handleSaveModelConfig = async () => {
     const config = {
       'base_url': modelConfig.baseUrl,
       'api_key': modelConfig.apiKey,
       'model': modelConfig.model,
     };
-    updateApiConfig(settingContext.appConfig.modelProvider, JSON.stringify(config)).then(() => {
+    updateModelConfig(settingContext.appConfig.modelProvider, JSON.stringify(config)).then(() => {
       alert('API Config Saved!');
     });
     settingContext.setModelConfig(modelConfig)
@@ -76,7 +76,7 @@ export default function ModelConfigSetting() {
         </div>
         <div className='setting'>
           <div>
-            <button onClick={handleSaveApiConfig}>Save</button>
+            <button onClick={handleSaveModelConfig}>Save</button>
           </div>
         </div>
       </div>
