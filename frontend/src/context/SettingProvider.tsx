@@ -25,7 +25,7 @@ export function SettingProvider({ children }: React.PropsWithChildren) {
   async function loadAppConfig() {
     setAppConfigLoading(true);
     const appConfig = await fetchAppConfig();
-    setAppConfig({ modelProvider: appConfig.api_spec || '', tplDir: appConfig.tpl_dir || '' });
+    setAppConfig({ modelProvider: appConfig.model_provider || '', tplDir: appConfig.tpl_dir || '' });
     setAppConfigLoading(false);
   };
 

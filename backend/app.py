@@ -62,20 +62,20 @@ async def update_config(app_config: config.AppConfig):
     config.update_app_config(app_config)
 
 
-@app.get("/api_spec")
-def get_api_specs():
-    return generators.get_api_specs()
+@app.get("/model_provider")
+def get_model_providers():
+    return generators.get_model_providers()
 
 
-@app.get("/api_spec/{api_spec}")
-def get_api_config(api_spec):
-    return config.get_api_config(api_spec)
+@app.get("/model_provider/{model_provider}")
+def get_modelconfig(model_provider):
+    return config.get_model_config(model_provider)
 
 
-@app.put("/api_spec/{api_spec}", status_code=status.HTTP_204_NO_CONTENT)
-async def update_api_config(api_spec, api_config: config.APIConfig):
-    config.update_api_config(api_spec, api_config)
-    generators.setStale(api_spec)
+@app.put("/model_provider/{model_provider}", status_code=status.HTTP_204_NO_CONTENT)
+async def update_api_config(model_provider, api_config: config.ModelConfig):
+    config.update_model_config(model_provider, api_config)
+    generators.setStale(model_provider)
 
 
 @app.get("/models")

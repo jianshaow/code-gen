@@ -27,17 +27,17 @@ export async function updateAppConfig(config: string) {
 }
 
 export async function fetchModelProviders() {
-  const url = `${getBeBaseUrl()}/api_spec`
+  const url = `${getBeBaseUrl()}/model_provider`
   return fetch(url).then(response => response.json());
 }
 
-export async function fetchModelConfig(api_spec: string) {
-  const url = `${getBeBaseUrl()}/api_spec/${api_spec}`;
+export async function fetchModelConfig(model_provider: string) {
+  const url = `${getBeBaseUrl()}/model_provider/${model_provider}`;
   return fetch(url).then(response => response.json());
 }
 
-export async function updateModelConfig(api_spec: string, config: string) {
-  const url = `${getBeBaseUrl()}/api_spec/${api_spec}`;
+export async function updateModelConfig(model_provider: string, config: string) {
+  const url = `${getBeBaseUrl()}/model_provider/${model_provider}`;
   fetch(url, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },

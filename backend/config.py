@@ -21,10 +21,10 @@ OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "deepseek-v3.1:671b-cloud")
 
 class AppConfig(BaseModel):
     tpl_dir: str
-    api_spec: str
+    model_provider: str
 
 
-class APIConfig(BaseModel):
+class ModelConfig(BaseModel):
     base_url: str | None
     api_key: str
     model: str
@@ -32,15 +32,15 @@ class APIConfig(BaseModel):
 
 __app_config = AppConfig(
     tpl_dir=os.getenv("PROMPT_TPL_DIR", "prompts"),
-    api_spec=os.getenv("API_SPEC", "openai"),
+    model_provider=os.getenv("MODEL_PROVIDER", "openai"),
 )
 
-__api_configs: Dict[str, APIConfig] = {
-    "openai": APIConfig(
+__model_configs: Dict[str, ModelConfig] = {
+    "openai": ModelConfig(
         base_url=OPENAI_BASE_URL, api_key=OPENAI_API_KEY, model=OPENAI_MODEL
     ),
-    "google": APIConfig(base_url="", api_key=GOOGLE_API_KEY, model=GOOGLE_MODEL),
-    "ollama": APIConfig(
+    "google": ModelConfig(base_url="", api_key=GOOGLE_API_KEY, model=GOOGLE_MODEL),
+    "ollama": ModelConfig(
         base_url=OLLAMA_BASE_URL, api_key=OLLAMA_API_KEY, model=OLLAMA_MODEL
     ),
 }
@@ -51,32 +51,32 @@ def get_app_config() -> AppConfig:
 
 
 def update_app_config(app_config: AppConfig):
-    __app_config.api_spec = app_config.api_spec
+    __app_config.model_provider = app_config.model_provider
     __app_config.tpl_dir = app_config.tpl_dir
 
 
-def get_api_config(api_spec: str) -> APIConfig:
-    api_config = __api_configs.get(api_spec)
-    if api_config:
-        return api_config
+def get_model_config(model_provider: str) -> ModelConfig:
+    model_config = __model_configs.get(model_provider)
+    if model_config:
+        return model_config
     else:
         import extension as ext
 
-        return ext.get_api_config(api_spec)
+        return ext.get_model_config(model_provider)
 
 
-def update_api_config(api_spec: str, api_config: APIConfig):
-    if api_spec in __api_configs:
-        __api_configs.update({api_spec: api_config})
+def update_model_config(model_provider: str, model_config: ModelConfig):
+    if model_provider in __model_configs:
+        __model_configs.update({model_provider: model_config})
     else:
         import extension as ext
 
-        ext.update_api_config(api_spec, api_config)
+        ext.update_model_config(model_provider, model_config)
 
 
 def __main():
     print(__app_config)
-    print(get_api_config(__app_config.api_spec))
+    print(get_model_config(__app_config.model_provider))
 
 
 if __name__ == "__main__":

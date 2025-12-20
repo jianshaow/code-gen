@@ -3,7 +3,7 @@ from ollama import Client as OllamaClient
 from openai import OpenAI as OpenAIClient
 
 
-def get_api_specs() -> list[str]:
+def get_model_providers() -> list[str]:
     return ["ollama", "openai", "google"]
 
 
@@ -77,4 +77,4 @@ def ollama_gen_stream(client: OllamaClient, model: str, prompt: str):
 
 
 if __name__ == "__main__":
-    print(get_api_specs())
+    print(get_model_providers())

@@ -10,7 +10,7 @@ export default function AppConfigSetting() {
 
   const handleSaveConfig = async () => {
     const config = {
-      'api_spec': appConfig.modelProvider,
+      'model_provider': appConfig.modelProvider,
       'tpl_dir': appConfig.tplDir,
     };
     updateAppConfig(JSON.stringify(config)).then(() => {

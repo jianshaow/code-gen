@@ -3,7 +3,7 @@ from typing import Generator
 
 import models
 import prompts
-from config import __app_config, get_api_config
+from config import __app_config, get_model_config
 
 
 class CodeGenerator:
@@ -86,31 +86,31 @@ _generators = {}
 
 
 def get_generator() -> CodeGenerator:
-    api_spec = __app_config.api_spec
-    api_config = get_api_config(api_spec)
-    generator = _generators.get(api_spec)
+    model_provider = __app_config.model_provider
+    model_config = get_model_config(model_provider)
+    generator = _generators.get(model_provider)
     if generator is None:
         generator = new_generator(
-            api_spec,
-            api_config.model,
-            base_url=api_config.base_url,
-            api_key=api_config.api_key,
+            model_provider,
+            model_config.model,
+            base_url=model_config.base_url,
+            api_key=model_config.api_key,
         )
-        _generators[api_spec] = generator
+        _generators[model_provider] = generator
     return generator
 
 
-def new_generator(api_spec: str, model: str, **kwargs) -> CodeGenerator:
-    if api_spec == "openai":
+def new_generator(model_provider: str, model: str, **kwargs) -> CodeGenerator:
+    if model_provider == "openai":
         generator = OpenAIGenerator(model, **kwargs)
-    elif api_spec == "ollama":
+    elif model_provider == "ollama":
         generator = OllamaGenerator(model, **kwargs)
-    elif api_spec == "google":
+    elif model_provider == "google":
         generator = GoogleGenerator(model, **kwargs)
     else:
         import extension as ext
 
-        generator = ext.new_generator(api_spec, model, **kwargs)
+        generator = ext.new_generator(model_provider, model, **kwargs)
     return generator
 
 
@@ -130,29 +130,29 @@ def get_models(reload=False):
     return get_generator().get_models(reload)
 
 
-def setStale(api_spec: str):
-    _generators.pop(api_spec, None)
+def setStale(model_provider: str):
+    _generators.pop(model_provider, None)
 
 
-def get_api_specs() -> list[str]:
-    api_specs = models.get_api_specs()
+def get_model_providers() -> list[str]:
+    model_providers = models.get_model_providers()
     import extension as ext
 
-    ext_api_specs = ext.get_api_specs()
-    return api_specs + ext_api_specs
+    ext_model_providers = ext.get_model_providers()
+    return model_providers + ext_model_providers
 
 
 def __main():
     import sys
 
-    print(get_api_specs())
+    print(get_model_providers())
     print("-" * 80)
     print(__app_config)
     print("-" * 80)
     for model in get_models():
         print(model)
     print("-" * 80)
-    print(get_api_config(__app_config.api_spec))
+    print(get_model_config(__app_config.model_provider))
     print("-" * 80)
     requirement = len(sys.argv) == 2 and sys.argv[1] or "code an example"
     response = gen_stream(prompts.get_tpl_names()[0], requirement)
