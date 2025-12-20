@@ -5,6 +5,10 @@ interface SettingContextType {
   beBaseUrl: string;
   setBeBaseUrl: React.Dispatch<React.SetStateAction<string>>;
   appConfig: AppConfig;
+  modelProviders: string[];
+  setModelProviders: React.Dispatch<React.SetStateAction<string[]>>;
+  models: string[];
+  setModels: React.Dispatch<React.SetStateAction<string[]>>;
   setAppConfig: React.Dispatch<React.SetStateAction<AppConfig>>;
   modelConfig: ModelConfig;
   setModelConfig: React.Dispatch<React.SetStateAction<ModelConfig>>;

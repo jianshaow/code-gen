@@ -6,10 +6,9 @@ import { fetchModels, updateModelConfig } from '../../../services/backend';
 export default function ModelConfigSetting() {
   const settingContext = useSetting();
   const [modelConfig, setModelConfig] = useState(settingContext.modelConfig);
-  const [models, setModels] = useState<string[]>([]);
 
   const handleReloadModels = async () => {
-    fetchModels(true).then(setModels);
+    fetchModels(true).then(settingContext.setModels);
   };
 
   const handleSaveModelConfig = async () => {
@@ -25,7 +24,6 @@ export default function ModelConfigSetting() {
   };
 
   useEffect(() => {
-    fetchModels(false).then(setModels);
     async function reload() {
       setModelConfig(settingContext.modelConfig)
     }
@@ -67,7 +65,7 @@ export default function ModelConfigSetting() {
             <label className='config-lable'>Model: </label>
             <select value={modelConfig.model} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
               setModelConfig({ ...modelConfig, model: e.target.value });
-            }}>{models.map(model => (
+            }}>{settingContext.models.map(model => (
               <option key={model} value={model}>{model}</option>
             ))}
             </select>

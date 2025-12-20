@@ -1,17 +1,26 @@
 
 import React, { useEffect, useState } from 'react';
-import { fetchModelConfig, fetchAppConfig, fetchTemplates, getBeBaseUrl } from '../services/backend';
+import { fetchAppConfig, fetchModelConfig, fetchModelProviders, fetchModels, fetchTemplates, getBeBaseUrl } from '../services/backend';
 import type { AppConfig, ModelConfig } from '../types/config';
 import { SettingContext } from './SettingContext';
 
 export function SettingProvider({ children }: React.PropsWithChildren) {
   const [beBaseUrl, setBeBaseUrl] = useState<string>(getBeBaseUrl());
+  const [modelProviders, setModelProviders] = useState<string[]>([]);
+  const [models, setModels] = useState<string[]>([]);
   const [appConfig, setAppConfig] = useState<AppConfig>({ modelProvider: '', tplDir: '' });
   const [modelConfig, setModelConfig] = useState<ModelConfig>({ baseUrl: '', apiKey: '', model: '' });
   const [templates, setTemplates] = useState<string[]>([]);
   const [template, setTemplate] = useState<string>('');
   const [appConfigLoading, setAppConfigLoading] = useState(false);
   const [modelConfigLoading, setModelConfigLoading] = useState(false)
+
+  function loadTemplates() {
+    fetchTemplates(false).then((templates) => {
+      setTemplates(templates);
+      setTemplate(templates[0] || '');
+    });
+  }
 
   async function loadAppConfig() {
     setAppConfigLoading(true);
@@ -34,18 +43,17 @@ export function SettingProvider({ children }: React.PropsWithChildren) {
 
   useEffect(() => {
     async function reload() {
+      fetchModelProviders().then(setModelProviders);
       await loadAppConfig();
+      loadTemplates();
     }
     reload()
-    fetchTemplates(false).then((templates) => {
-      setTemplates(templates);
-      setTemplate(templates[0] || '');
-    })
   }, [beBaseUrl]);
 
   useEffect(() => {
     if (appConfig.modelProvider) {
       async function reload() {
+        fetchModels(false).then(setModels);
         await loadModelConfig(appConfig.modelProvider);
       }
       reload()
@@ -56,6 +64,8 @@ export function SettingProvider({ children }: React.PropsWithChildren) {
     <SettingContext.Provider
       value={{
         beBaseUrl, setBeBaseUrl,
+        modelProviders, setModelProviders,
+        models, setModels,
         appConfig, setAppConfig,
         modelConfig, setModelConfig,
         templates, setTemplates,

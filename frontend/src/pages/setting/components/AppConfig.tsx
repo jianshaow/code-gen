@@ -1,12 +1,11 @@
 
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { useSetting } from '../../../context/SettingContext';
-import { fetchModelProviders, updateAppConfig } from '../../../services/backend';
+import { updateAppConfig } from '../../../services/backend';
 import type { AppConfig } from '../../../types/config';
 
 export default function AppConfigSetting() {
   const settingContext = useSetting();
-  const [modelProviders, setModelProviders] = useState<string[]>([]);
   const [appConfig, setAppConfig] = useState<AppConfig>(settingContext.appConfig);
 
   const handleSaveConfig = async () => {
@@ -21,7 +20,6 @@ export default function AppConfigSetting() {
   };
 
   useEffect(() => {
-    fetchModelProviders().then(setModelProviders);
     async function reload() {
       setAppConfig(settingContext.appConfig)
     }
@@ -37,7 +35,7 @@ export default function AppConfigSetting() {
             <label className='config-lable'>Model Provider: </label>
             <select value={appConfig.modelProvider} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
               setAppConfig(prev => ({ ...prev, modelProvider: e.target.value }));
-            }}>{modelProviders.map(modelProvider => (
+            }}>{settingContext.modelProviders.map(modelProvider => (
               <option key={modelProvider} value={modelProvider}>{modelProvider}</option>
             ))}
             </select>
