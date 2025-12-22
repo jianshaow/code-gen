@@ -1,13 +1,11 @@
 import os
 
-import config
-import generators
 import uvicorn
 from fastapi import FastAPI, Request, status
 from fastapi.responses import FileResponse, PlainTextResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
-from codegen import prompts
+from codegen import config, generators, prompts
 
 frontend = os.path.abspath(os.path.join("../frontend", "dist"))
 frontend = os.getenv("FRONTEND_DIR", frontend)

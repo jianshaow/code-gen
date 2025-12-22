@@ -2,7 +2,7 @@ import os
 
 from pydantic import BaseModel
 
-from config import get_app_config
+from codegen.config import get_app_config
 
 
 class Templates(BaseModel):

@@ -1,9 +1,8 @@
 from abc import abstractmethod
 from typing import Generator
 
-import models
-import prompts
-from config import __app_config, get_model_config
+from codegen import models, prompts
+from codegen.config import __app_config, get_model_config
 
 
 class CodeGenerator:

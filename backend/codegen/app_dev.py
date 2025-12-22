@@ -3,7 +3,7 @@ import os
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
-from app import app
+from codegen.app import app
 
 app.add_middleware(
     CORSMiddleware,
