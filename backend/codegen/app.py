@@ -1,13 +1,13 @@
 import os
 
+import config
+import generators
 import uvicorn
 from fastapi import FastAPI, Request, status
 from fastapi.responses import FileResponse, PlainTextResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
-import config
-import generators
-import prompts
+from codegen import prompts
 
 frontend = os.path.abspath(os.path.join("../frontend", "dist"))
 frontend = os.getenv("FRONTEND_DIR", frontend)
@@ -99,4 +99,4 @@ if __name__ == "__main__":
     app_host = os.getenv("APP_HOST", "0.0.0.0")
     app_port = int(os.getenv("APP_PORT", "8000"))
 
-    uvicorn.run(app="app:app", host=app_host, port=app_port, reload=True)
+    uvicorn.run(app="codegen.app:app", host=app_host, port=app_port, reload=True)
