@@ -161,4 +161,4 @@ cython_debug/
 
 *.code-workspace
 .vscode
-frontend/.github/copilot-instructions.md
+frontend/.github
