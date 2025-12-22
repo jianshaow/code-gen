@@ -47,6 +47,7 @@ select {
   border: 1px solid #d0d7de;
   border-radius: 5px;
   padding: 0 5px;
+  font-size: 1em;
 }
 
 h1 {
