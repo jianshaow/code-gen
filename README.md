@@ -6,11 +6,11 @@ Demo a code generator with natural language.
 ~~~shell
 # install dependencies
 docker run -v $PWD/frontend:/home/node/frontend \
-       --rm jianshao/node-dev:lts-slim \
+       --rm jianshao/node-dev:lts \
        npm --prefix /home/node/frontend install
 # build package
 docker run -v $PWD/frontend:/home/node/frontend \
-       --rm jianshao/node-dev:lts-slim \
+       --rm jianshao/node-dev:lts \
        npm --prefix /home/node/frontend run build
 ~~~
 
@@ -22,7 +22,7 @@ docker run -v $PWD/frontend:/home/node/frontend \
 ### Test image
 ~~~ shell
 docker run -v $PWD/backend/prompts:/home/devel/prompts \
-       -e PROMPT_TPL_DIR=/home/devel/prompts -p 5000:5000 \
+       -e PROMPT_TPL_DIR=/home/devel/prompts -p 5173:5173 \
        --add-host=host.docker.internal:host-gateway \
        --rm jianshao/codegen-demo:latest
 ~~~
