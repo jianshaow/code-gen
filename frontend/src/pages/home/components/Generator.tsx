@@ -1,3 +1,4 @@
+import { ArrowRight } from 'lucide-react';
 import { useRef, useState, type ChangeEvent } from 'react';
 import MarkdownViewer from '../../../components/Markdown';
 import { useSetting } from '../../../context/SettingContext';
@@ -30,7 +31,9 @@ export default function Generator() {
           }} />
       </div>
       <div className='container-column'>
-        <button onClick={handleGenerateStream}>=&gt;</button>
+        <button onClick={handleGenerateStream} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3px 6px' }}>
+          <ArrowRight size={20} />
+        </button>
       </div>
       <div className='generated-block' ref={codeRef}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
