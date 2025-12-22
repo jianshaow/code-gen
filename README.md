@@ -22,7 +22,7 @@ docker run -v $PWD/frontend:/home/node/frontend \
 ### Test image
 ~~~ shell
 docker run -v $PWD/backend/prompts:/home/devel/prompts \
-       -e PROMPT_TPL_DIR=/home/devel/prompts -p 5173:5173 \
+       -e PROMPT_TPL_DIR=/home/devel/prompts -p 8000:8000 \
        --add-host=host.docker.internal:host-gateway \
        --rm jianshao/codegen-demo:latest
 ~~~
