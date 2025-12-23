@@ -71,8 +71,8 @@ def get_modelconfig(model_provider):
 
 
 @app.put("/model_provider/{model_provider}", status_code=status.HTTP_204_NO_CONTENT)
-async def update_api_config(model_provider, api_config: config.ModelConfig):
-    config.update_model_config(model_provider, api_config)
+async def update_model_config(model_provider, model_config: config.ModelConfig):
+    config.update_model_config(model_provider, model_config)
     generators.setStale(model_provider)
 
 
